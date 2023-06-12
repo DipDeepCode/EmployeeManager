@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ru.ddc.em.persistence.model.Department;
 import ru.ddc.em.persistence.model.Vacancy;
 
@@ -30,11 +33,28 @@ public class VacancyRepositoryTest {
     }
 
     @Test
+    public void whenFindAllVacanciesPage_thenListSizeEqualsSomeValue() {
+        Pageable pageable = PageRequest.of(0, 2, Vacancy.defaultSort);
+        Page<Vacancy> vacancyPage = vacancyRepository.findAll(pageable);
+        showVacancyList(vacancyPage);
+        assertEquals(2, vacancyPage.getSize());
+    }
+
+    @Test
     public void whenFindAllVacanciesByDepartmentNumber_thenListSizeEqualsSomeValue() {
         Long departmentId = 1L;
         List<Vacancy> vacancyList = vacancyRepository.findByDepartmentId(departmentId);
         showVacancyList(vacancyList);
         assertEquals(3, vacancyList.size());
+    }
+
+    @Test
+    public void whenFindAllVacanciesByDepartmentNumberPage_thenListSizeEqualsSomeValue() {
+        Long departmentId = 1L;
+        Pageable pageable = PageRequest.of(0, 2, Vacancy.defaultSort);
+        Page<Vacancy> vacancyPage = vacancyRepository.findByDepartmentId(departmentId, pageable);
+        showVacancyList(vacancyPage);
+        assertEquals(2, vacancyPage.getSize());
     }
 
     @Test
@@ -75,7 +95,7 @@ public class VacancyRepositoryTest {
         assertEquals(1, counterBeforeDelete - counterAfterDelete);
     }
 
-    private static void showVacancyList(List<Vacancy> vacancyList) {
+    private static void showVacancyList(Iterable<Vacancy> vacancyList) {
         vacancyList.forEach(VacancyRepositoryTest::showVacancy);
     }
 

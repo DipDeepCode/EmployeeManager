@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.ddc.em.persistence.model.Employee;
 
 import java.util.List;
@@ -26,6 +30,15 @@ public class EmployeeRepositoryTest {
     }
 
     @Test
+    public void whenFindAllEmployeesPage_thenListSizeEqualsSomeValue() {
+        Pageable pageable = PageRequest.of(0, 2,
+                Sort.Direction.ASC, "patronymic", "firstname", "lastname");
+        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+        showEmployeeList(employeePage);
+        assertEquals(2, employeePage.getSize());
+    }
+
+    @Test
     public void whenFindEmployeeById_thenEmployeePersonnelNumberEqualsToSpecified() {
         Long employeePersonnelNumber = 1L;
         Employee employee = employeeRepository.findById(employeePersonnelNumber).orElseThrow();
@@ -36,6 +49,14 @@ public class EmployeeRepositoryTest {
     @Test
     public void whenFindEmployeesByVacancyIsNull_thenListSizeEqualsOne() {
         List<Employee> employeeList = employeeRepository.findByVacancyNull();
+        showEmployeeList(employeeList);
+        assertEquals(1, employeeList.size());
+    }
+
+    @Test
+    public void whenFindEmployeesByVacancyIsNullSort_thenListSizeEqualsOne() {
+        Sort sort = Sort.by(Sort.Direction.ASC, "patronymic", "firstname", "lastname");
+        List<Employee> employeeList = employeeRepository.findByVacancyNull(sort);
         showEmployeeList(employeeList);
         assertEquals(1, employeeList.size());
     }
@@ -69,7 +90,7 @@ public class EmployeeRepositoryTest {
         assertEquals(1, counterBeforeDelete - counterAfterDelete);
     }
 
-    private static void showEmployeeList(List<Employee> employeeList) {
+    private static void showEmployeeList(Iterable<Employee> employeeList) {
         employeeList.forEach(EmployeeRepositoryTest::showEmployee);
     }
 

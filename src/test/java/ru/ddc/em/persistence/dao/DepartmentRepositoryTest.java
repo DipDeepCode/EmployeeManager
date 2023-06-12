@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ru.ddc.em.persistence.model.Department;
 
 import java.util.List;
@@ -23,6 +26,14 @@ public class DepartmentRepositoryTest {
         List<Department> departmentList = departmentRepository.findAll();
         showDepartmentList(departmentList);
         assertEquals(4, departmentList.size());
+    }
+
+    @Test
+    public void whenFindAllDepartmentsPage_thenListSizeEqualsSomeValue() {
+        Pageable pageable = PageRequest.of(0, 2, Department.defaultSort);
+        Page<Department> departmentPage = departmentRepository.findAll(pageable);
+        showDepartmentList(departmentPage);
+        assertEquals(2, departmentPage.getSize());
     }
 
     @Test
@@ -74,7 +85,7 @@ public class DepartmentRepositoryTest {
         assertEquals(1, counterBeforeDelete - counterAfterDelete);
     }
 
-    private static void showDepartmentList(List<Department> departmentList) {
+    private static void showDepartmentList(Iterable<Department> departmentList) {
         departmentList.forEach(DepartmentRepositoryTest::showDepartment);
     }
 
