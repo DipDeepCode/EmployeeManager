@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
@@ -11,6 +12,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "vacancy")
 public class Vacancy {
+    public static final Sort defaultSort = Sort.by("position").ascending();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
