@@ -1,6 +1,8 @@
 package ru.ddc.em.persistence.dao;
 
 import jakarta.annotation.Nonnull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.ddc.em.persistence.model.Vacancy;
@@ -14,7 +16,13 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
     List<Vacancy> findAll();
 
     @EntityGraph(attributePaths = {"department", "employee"})
+    Page<Vacancy> findAll(Pageable pageable);
+
+    @EntityGraph(attributePaths = {"department", "employee"})
     List<Vacancy> findByDepartmentId(@Nonnull Long departmentId);
+
+    @EntityGraph(attributePaths = {"department", "employee"})
+    Page<Vacancy> findByDepartmentId(@Nonnull Long departmentId, Pageable pageable);
 
     @EntityGraph(attributePaths = {"department", "employee"})
     Optional<Vacancy> findById(@Nonnull Long id);
