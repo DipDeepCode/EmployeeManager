@@ -1,19 +1,15 @@
 package ru.ddc.em.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
-import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import ru.ddc.em.persistence.dao.DepartmentRepository;
 import ru.ddc.em.persistence.model.Department;
 import ru.ddc.em.persistence.model.Vacancy;
-import ru.ddc.em.utils.custommapper.CustomMapper;
 import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.ArrayList;
@@ -24,38 +20,27 @@ import static org.mockito.Mockito.*;
 import static ru.ddc.em.testutils.DepartmentTestBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = {ModelMapper.class, CustomMapper.class})
+@ExtendWith(MockitoExtension.class)
 class DepartmentServiceTest {
 
     @Mock
-    private DepartmentRepository mockedRepository;
+    private DepartmentRepository departmentRepository;
 
     @InjectMocks
     private DepartmentService departmentService;
 
     @Test
     public void whenFindAllByPageNoPageSizeSortBy_thenReturnExpectedPage() {
-        Department expectedDepartment1 = aDepartment()
-                .withId(1L)
-                .withName("test_department_name_1")
-                .withNumber("test_department_number_1")
-                .build();
-        Department expectedDepartment2 = aDepartment()
-                .withId(2L)
-                .withName("test_department_name_2")
-                .withNumber("test_department_number_2")
-                .build();
-        Page<Department> expectedPage = new PageImpl<>(List.of(expectedDepartment1, expectedDepartment2));
+        Page<Department> expectedPage = getExpectedPage();
 
-        when(mockedRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
+        when(departmentRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
 
-        Page<Department> actualPage = departmentService.findAll(1, 1, "sort");
+        Page<Department> actualPage = departmentService.findAll(1,2, Sort.by("sort"));
 
         assertTrue(new ReflectionEquals(expectedPage).matches(actualPage));
     }
 
-    @Test
-    public void whenFindAllByPageNoPageSize_thenReturnExpectedPage() {
+    private Page<Department> getExpectedPage() {
         Department expectedDepartment1 = aDepartment()
                 .withId(1L)
                 .withName("test_department_name_1")
@@ -66,9 +51,14 @@ class DepartmentServiceTest {
                 .withName("test_department_name_2")
                 .withNumber("test_department_number_2")
                 .build();
-        Page<Department> expectedPage = new PageImpl<>(List.of(expectedDepartment1, expectedDepartment2));
+        return new PageImpl<>(List.of(expectedDepartment1, expectedDepartment2));
+    }
 
-        when(mockedRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
+    @Test
+    public void whenFindAllByPageNoPageSize_thenReturnExpectedPage() {
+        Page<Department> expectedPage = getExpectedPage();
+
+        when(departmentRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
 
         Page<Department> actualPage = departmentService.findAll(1, 1);
 
@@ -77,19 +67,9 @@ class DepartmentServiceTest {
 
     @Test
     public void whenFindAllByPageable_thenReturnExpectedPage() {
-        Department expectedDepartment1 = aDepartment()
-                .withId(1L)
-                .withName("test_department_name_1")
-                .withNumber("test_department_number_1")
-                .build();
-        Department expectedDepartment2 = aDepartment()
-                .withId(2L)
-                .withName("test_department_name_2")
-                .withNumber("test_department_number_2")
-                .build();
-        Page<Department> expectedPage = new PageImpl<>(List.of(expectedDepartment1, expectedDepartment2));
+        Page<Department> expectedPage = getExpectedPage();
         Pageable pageable = PageRequest.of(0, 2, Department.defaultSort);
-        when(mockedRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
+        when(departmentRepository.findAll(any(Pageable.class))).thenReturn(expectedPage);
 
         Page<Department> actualPage = departmentService.findAll(pageable);
 
@@ -112,7 +92,7 @@ class DepartmentServiceTest {
                 .withNumber(departmentNumber)
                 .build();
 
-        when(mockedRepository.save(any(Department.class))).thenReturn(expectedDepartment);
+        when(departmentRepository.save(any(Department.class))).thenReturn(expectedDepartment);
 
         Department actualDepartment = departmentService.save(departmentToSave);
 
@@ -129,7 +109,7 @@ class DepartmentServiceTest {
                 .withNumber("test_department_number")
                 .build();
 
-        when(mockedRepository.findById(anyLong())).thenReturn(Optional.of(expectedDepartment));
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(expectedDepartment));
 
         Department actualDepartment = departmentService.findById(departmentId);
 
@@ -138,30 +118,28 @@ class DepartmentServiceTest {
 
     @Test
     public void whenFindMissingDepartmentById_thenThrowException() {
-        when(mockedRepository.findById(anyLong())).thenThrow(IllegalArgumentException.class);
+        when(departmentRepository.findById(anyLong())).thenThrow(IllegalArgumentException.class);
 
         assertThrows(IllegalArgumentException.class, () -> departmentService.findById(anyLong()));
     }
 
     @Test
     public void whenDeleteDepartmentWithoutVacancies_thenWithoutThrowingException() {
-        Long id = 1L;
         Department department = aDepartment()
-                .withId(id)
+                .withId(1L)
                 .withVacancyList(new ArrayList<>())
                 .build();
-        when(mockedRepository.findById(anyLong())).thenReturn(Optional.of(department));
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
         assertDoesNotThrow(() -> departmentService.deleteById(anyLong()));
     }
 
     @Test
     public void whenDeleteDepartmentWithVacancies_thenThrowException() {
-        Long id = 1L;
         Department department = aDepartment()
-                .withId(id)
+                .withId(1L)
                 .withVacancyList(List.of(new Vacancy()))
                 .build();
-        when(mockedRepository.findById(anyLong())).thenReturn(Optional.of(department));
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
         assertThrows(DeleteEntityError.class, () -> departmentService.deleteById(anyLong()));
     }
 }

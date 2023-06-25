@@ -1,4 +1,4 @@
-package ru.ddc.em.persistence.testutils;
+package ru.ddc.em.testutils;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

@@ -18,8 +18,8 @@ public class DepartmentService {
         this.departmentRepository = departmentRepository;
     }
 
-    public Page<Department> findAll(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    public Page<Department> findAll(Integer pageNo, Integer pageSize, Sort sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sortBy);
         return findAll(pageable);
     }
     

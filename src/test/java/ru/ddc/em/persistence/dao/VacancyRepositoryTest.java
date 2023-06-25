@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.ddc.em.persistence.testutils.VacancyTestBuilder.*;
+import static ru.ddc.em.testutils.VacancyTestBuilder.*;
 
 @DataJpaTest
 public class VacancyRepositoryTest {

@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.ddc.em.persistence.testutils.DepartmentTestBuilder.*;
+import static ru.ddc.em.testutils.DepartmentTestBuilder.*;
 
 @DataJpaTest
 public class DepartmentRepositoryTest {

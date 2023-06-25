@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.ddc.em.persistence.testutils.EmployeeTestBuilder.*;
+import static ru.ddc.em.testutils.EmployeeTestBuilder.*;
 
 @DataJpaTest
 public class EmployeeRepositoryTest {
