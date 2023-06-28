@@ -10,7 +10,6 @@ import org.springframework.data.domain.*;
 import ru.ddc.em.persistence.dao.EmployeeRepository;
 import ru.ddc.em.persistence.model.Department;
 import ru.ddc.em.persistence.model.Employee;
-import ru.ddc.em.testutils.VacancyTestBuilder;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -19,7 +18,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static ru.ddc.em.testutils.EmployeeTestBuilder.*;
-import static ru.ddc.em.testutils.VacancyTestBuilder.*;
 
 @ExtendWith(MockitoExtension.class)
 class EmployeeServiceTest {
