@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 import ru.ddc.em.persistence.model.Department;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.ddc.em.persistence.testutils.DepartmentTestBuilder.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static ru.ddc.em.testutils.DepartmentTestBuilder.*;
 
 @DataJpaTest
 public class DepartmentRepositoryTest {
@@ -42,6 +42,13 @@ public class DepartmentRepositoryTest {
         Department department = departmentRepository.findById(departmentId).orElseThrow();
         showDepartment(department);
         assertEquals(departmentId, department.getId());
+    }
+
+    @Test
+    public void whenFindMissingDepartmentById_thenOptionalIsEmpty() {
+        Long departmentId = 100L;
+        Optional<Department> optionalDepartment = departmentRepository.findById(departmentId);
+        assertTrue(optionalDepartment.isEmpty());
     }
 
     @Test

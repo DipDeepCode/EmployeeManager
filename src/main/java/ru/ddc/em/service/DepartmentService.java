@@ -18,8 +18,8 @@ public class DepartmentService {
         this.departmentRepository = departmentRepository;
     }
 
-    public Page<Department> findAll(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+    public Page<Department> findAll(Integer pageNo, Integer pageSize, Sort sortBy) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, sortBy);
         return findAll(pageable);
     }
     
@@ -37,7 +37,7 @@ public class DepartmentService {
     }
 
     public Department findById(Long id) {
-        return departmentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Неверный номер отдела: " + id));
+        return departmentRepository.findById(id).orElseThrow();
     }
 
     public void deleteById(Long id) throws DeleteEntityError {
