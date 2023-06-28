@@ -13,6 +13,7 @@ import ru.ddc.em.testutils.EmployeeTestBuilder;
 import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -114,8 +115,8 @@ class VacancyServiceTest {
 
     @Test
     public void whenFindMissingVacancyById_thenThrowException() {
-        when(vacancyRepository.findById(anyLong())).thenThrow(IllegalArgumentException.class);
-        assertThrows(IllegalArgumentException.class, () -> vacancyService.findById(anyLong()));
+        when(vacancyRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NoSuchElementException.class, () -> vacancyService.findById(anyLong()));
     }
 
     @Test

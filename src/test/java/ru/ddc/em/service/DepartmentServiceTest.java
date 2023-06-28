@@ -14,6 +14,7 @@ import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -118,9 +119,9 @@ class DepartmentServiceTest {
 
     @Test
     public void whenFindMissingDepartmentById_thenThrowException() {
-        when(departmentRepository.findById(anyLong())).thenThrow(IllegalArgumentException.class);
+        when(departmentRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> departmentService.findById(anyLong()));
+        assertThrows(NoSuchElementException.class, () -> departmentService.findById(anyLong()));
     }
 
     @Test

@@ -53,7 +53,7 @@ public class VacancyService {
     }
 
     public Vacancy findById(Long id) {
-        return vacancyRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Неверный id вакансии: " + id));
+        return vacancyRepository.findById(id).orElseThrow();
     }
 
     public void deleteById(Long id) throws DeleteEntityError {

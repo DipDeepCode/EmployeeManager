@@ -11,9 +11,9 @@ import org.springframework.data.domain.Sort;
 import ru.ddc.em.persistence.model.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static ru.ddc.em.testutils.EmployeeTestBuilder.*;
 
 @DataJpaTest
@@ -44,6 +44,12 @@ public class EmployeeRepositoryTest {
         Employee employee = employeeRepository.findById(employeePersonnelNumber).orElseThrow();
         showEmployee(employee);
         assertEquals(employeePersonnelNumber, employee.getPersonnelNumber());
+    }
+
+    @Test
+    public void whenFindMissingEmployeeById_thenReturnEmptyOptional() {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(100L);
+        assertTrue(optionalEmployee.isEmpty());
     }
 
     @Test

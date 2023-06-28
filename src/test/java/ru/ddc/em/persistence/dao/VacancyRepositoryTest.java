@@ -11,9 +11,9 @@ import ru.ddc.em.persistence.model.Department;
 import ru.ddc.em.persistence.model.Vacancy;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static ru.ddc.em.testutils.VacancyTestBuilder.*;
 
 @DataJpaTest
@@ -63,6 +63,12 @@ public class VacancyRepositoryTest {
         Vacancy vacancy = vacancyRepository.findById(vacancyId).orElseThrow();
         showVacancy(vacancy);
         assertEquals(vacancyId, vacancy.getId());
+    }
+
+    @Test
+    public void whenFindMissingVacancyById_thenReturnEmptyOptional() {
+        Optional<Vacancy> optionalVacancy = vacancyRepository.findById(100L);
+        assertTrue(optionalVacancy.isEmpty());
     }
 
     @Test

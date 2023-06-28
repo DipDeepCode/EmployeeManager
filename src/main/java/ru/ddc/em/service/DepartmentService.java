@@ -37,7 +37,7 @@ public class DepartmentService {
     }
 
     public Department findById(Long id) {
-        return departmentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Неверный номер отдела: " + id));
+        return departmentRepository.findById(id).orElseThrow();
     }
 
     public void deleteById(Long id) throws DeleteEntityError {
