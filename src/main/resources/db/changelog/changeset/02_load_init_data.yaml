@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: load_init_data_in_employee
+      author: DipDeepCode
+      changes:
+        - loadData:
+            tableName: employee
+            columns:
+              - column:
+                  header: Фамилия
+                  name: lastname
+              - column:
+                  header: Имя
+                  name: firstname
+              - column:
+                  header: Отчество
+                  name: patronymic
+              - column:
+                  header: Дата рождения
+                  name: birthdate
+                  type: date
+              - column:
+                  header: Номер телефона
+                  name: telephone_number
+              - column:
+                  header: Электронная почта
+                  name: email
+            commentLineStartsWith: //
+            encoding: UTF-8
+            file:  init_data/employees.csv
+            schemaName: public
+            separator: ;
+            relativeToChangelogFile: true
+            usePreparedStatements: true
+  - changeSet:
+      id: load_init_data_in_department
+      author: DipDeepCode
+      changes:
+        - loadData:
+            tableName: department
+            columns:
+              - column:
+                  header: Номер
+                  name: number
+              - column:
+                  header: Название
+                  name: name
+            commentLineStartsWith: //
+            encoding: UTF-8
+            file: init_data/departments.csv
+            schemaName: public
+            separator: ;
+            relativeToChangelogFile: true
+            usePreparedStatements: true
+  - changeSet:
+      id: load_init_data_in_vacancy
+      author: DipDeepCode
+      changes:
+        - loadData:
+            tableName: vacancy
+            columns:
+              - column:
+                  header: id_отдела
+                  name: department_id
+              - column:
+                  header: Должность
+                  name: position
+              - column:
+                  header: Оклад
+                  name: salary
+                  type: numeric
+              - column:
+                  header: табельный_номер
+                  name: employee_personnel_number
+            commentLineStartsWith: //
+            encoding: UTF-8
+            file: init_data/vacancies.csv
+            schemaName: public
+            separator: ;
+            relativeToChangelogFile: true
+            usePreparedStatements: true
