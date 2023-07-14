@@ -17,16 +17,16 @@
         <div class="col-md-10">
             <h3 class="my-5">
                 <span th:if="${isVacanciesOnlyOfTheSameDepartment}">Вакансии отдела
-                    <span th:text="${vacancies[0].departmentDto.number}"></span>
+                    <span th:text="${department.number}"></span>
                     <br>
-                    <span th:text="${vacancies[0].departmentDto.name}"></span>
+                    <span th:text="${department.name}"></span>
                 </span>
-                <span th:unless="${isVacanciesOnlyOfTheSameDepartment}">Вакансии</span>
+                <span th:unless="${isVacanciesOnlyOfTheSameDepartment}">Все вакансии</span>
             </h3>
             <div class="row">
                 <div class="column-left">
                     <p class="my-1">
-                        <a th:href="@{/vacancies/addForm/{departmentId}(departmentId=${vacancies[0].departmentDto.id})}"
+                        <a th:href="@{/vacancies/addForm/{departmentId}(departmentId=${department.id})}"
                            class="btn btn-outline-primary btn-sm"
                            th:if="${isVacanciesOnlyOfTheSameDepartment}">
                             <i class="fa fa-plus-square"></i> Добавить вакансию

@@ -15,8 +15,8 @@
 <div class="container my-5">
   <div class="row">
     <div class="col-md-10">
-      <h3 class="my-5">Новая вакансия для отдела <span th:text="${departmentDto.number}"></span>
-        <br><span th:text="${departmentDto.name}"></span>
+      <h3 class="my-5">Новая вакансия для отдела <span th:text="${department.number}"></span>
+        <br><span th:text="${department.name}"></span>
       </h3>
       <div class="row">
         <div class="column-left">
@@ -28,32 +28,29 @@
           </button>
         </div>
       </div>
-      <form action="#"
-            th:action="@{/vacancies/add}"
-            th:object="${vacancyDto}"
-            method="post">
+      <form action="#" th:action="@{/vacancies/add}" th:object="${vacancyDto}" method="post">
         <div class="row">
           <div class="form-group col-md-10">
-            <label for="employeePosition" class="col-form-label">Должность</label>
-            <input type="text" th:field="*{employeePosition}" class="form-control" id="employeePosition">
-            <span th:if="${#fields.hasErrors('employeePosition')}" th:errors="*{employeePosition}" class="text-danger"></span>
+            <label for="position" class="col-form-label">Должность</label>
+            <input type="text" th:field="*{position}" class="form-control" id="position">
+            <span th:if="${#fields.hasErrors('position')}" th:errors="*{position}" class="text-danger"></span>
           </div>
           <div class="form-group col-md-10">
             <label for="salary" class="col-form-label">Оклад</label>
             <input type="number" th:field="*{salary}" class="form-control" id="salary">
-            <span th:if="${#fields.hasErrors('salary')}" th:errors="*{salary  }" class="text-danger"></span>
+            <span th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="text-danger"></span>
           </div>
           <div class="form-group col-md-10">
-            <label for="employeePersonnelNumber" class="col-form-label">Сотрудник</label>
-            <select class="form-control selectpicker" th:field="*{employeePersonnelNumber}" id="employeePersonnelNumber">
-              <option value="">Вакансия свободна</option>
+            <label for="employeeDto.personnelNumber" class="col-form-label">Сотрудник</label>
+            <select class="form-control selectpicker" th:field="*{employeeDto.personnelNumber}" id="employeeDto.personnelNumber">
+              <option value="-1">Вакансия свободна</option>
               <option th:each="employee : ${employees}"
                       th:text="|${employee.lastname} ${employee.firstname} ${employee.patronymic}|"
                       th:value="${employee.personnelNumber}">
               </option>
             </select>
           </div>
-          <input type="hidden" th:field="*{departmentId}" id="departmentId" value="${departmentDto.id}">
+          <input type="hidden" th:value="${department.id}" name="departmentDto.id" id="departmentDto.id">
         </div>
         <div class="row">
           <div class="col-md-6 mt-5">

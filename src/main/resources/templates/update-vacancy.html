@@ -54,11 +54,14 @@
                     <div class="form-group col-md-10">
                         <label for="employeePersonnelNumber" class="col-form-label">Работник</label>
                         <select class="form-control selectpicker" th:field="*{employeeDto.personnelNumber}" id="employeePersonnelNumber">
-                            <option value="">Вакансия свободна</option>
+                            <option value="-1">Вакансия свободна</option>
+                            <option th:if="*{employeeDto.personnelNumber != null}"
+                                    th:value="*{employeeDto.personnelNumber}"
+                                    th:text="|*{employeeDto.lastname} *{employeeDto.firstname} *{employeeDto.patronymic}|"
+                                    selected></option>
                             <option th:each="employee : ${employees}"
                                     th:text="|${employee.lastname} ${employee.firstname} ${employee.patronymic}|"
-                                    th:value="${employee.personnelNumber}"
-                                    th:selected="*{employeeDto.personnelNumber}">
+                                    th:value="${employee.personnelNumber}">
                             </option>
                         </select>
                     </div>
