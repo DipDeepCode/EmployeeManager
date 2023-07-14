@@ -15,6 +15,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @EntityGraph(attributePaths = "vacancies")
     List<Department> findAll();
 
-    @EntityGraph(attributePaths = "vacancies")
     Page<Department> findAll(Pageable pageable);
 }
