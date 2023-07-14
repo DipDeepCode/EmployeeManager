@@ -55,7 +55,7 @@ public class DepartmentRepositoryTest {
     public void whenSaveDepartment_thenDepartmentCounterLagerByOne() {
         long counterBeforeSave = departmentRepository.count();
         Department department = aDepartment().build();
-        showDepartment(department);
+        showDepartmentAndVacancies(department);
         departmentRepository.save(department);
         long counterAfterSave = departmentRepository.count();
         assertEquals(1, counterAfterSave - counterBeforeSave);
@@ -66,10 +66,10 @@ public class DepartmentRepositoryTest {
         Long departmentId = 1L;
         String newName = "new_name";
         Department department = departmentRepository.findById(departmentId).orElseThrow();
-        showDepartment(department);
+        showDepartmentAndVacancies(department);
         department.setName(newName);
         department = departmentRepository.saveAndFlush(department);
-        showDepartment(department);
+        showDepartmentAndVacancies(department);
         assertEquals(newName, department.getName());
     }
 
@@ -93,11 +93,15 @@ public class DepartmentRepositoryTest {
     }
 
     private static void showDepartmentList(Iterable<Department> departmentList) {
-        departmentList.forEach(DepartmentRepositoryTest::showDepartment);
+        departmentList.forEach(DepartmentRepositoryTest::showDepartmentAndVacancies);
+    }
+
+    private static void showDepartmentAndVacancies(Department department) {
+        System.out.println(department);
+        department.getVacancies().forEach(vacancy -> System.out.println("   -" + vacancy));
     }
 
     private static void showDepartment(Department department) {
         System.out.println(department);
-        department.getVacancies().forEach(vacancy -> System.out.println("   -" + vacancy));
     }
 }

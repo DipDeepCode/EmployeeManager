@@ -29,7 +29,7 @@ public class Department {
     private String name;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department")
     private List<Vacancy> vacancies = new ArrayList<>();
 
     public void addVacancy(Vacancy vacancy) {

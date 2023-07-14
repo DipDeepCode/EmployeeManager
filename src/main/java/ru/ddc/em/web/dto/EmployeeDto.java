@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class EmployeeDto {
-    private String personnelNumber;
+    private Long personnelNumber;
     private String firstname;
     private String lastname;
     private String patronymic;

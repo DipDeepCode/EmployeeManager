@@ -79,6 +79,20 @@ public class VacancyRepositoryTest {
     }
 
     @Test
+    public void whenSaveVacancyWithoutEmployee_thenWithoutThrowingException() {
+        Department department = departmentRepository.findById(1L).orElseThrow();
+        Vacancy vacancy = aVacancy()
+                .withId(1L)
+                .withPosition("position")
+                .withSalary(100f)
+                .withDepartment(department)
+                .withEmployee(null)
+                .build();
+        showVacancy(vacancy);
+        assertDoesNotThrow(() -> vacancyRepository.saveAndFlush(vacancy));
+    }
+
+    @Test
     public void whenSaveVacancyWithDepartment_thenVacancyCounterLagerByOne() {
         long counterBeforeSave = vacancyRepository.count();
         Vacancy vacancy = aVacancy().build();
