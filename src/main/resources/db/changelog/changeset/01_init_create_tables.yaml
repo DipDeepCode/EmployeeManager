@@ -1,0 +1,151 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_table_department
+      author: DipDeepCode
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: department_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: number
+                  type: VARCHAR(32)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(64)
+            tableName: department
+  - changeSet:
+      id: create_table_employee
+      author: DipDeepCode
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  name: birthdate
+                  type: date
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: employee_pkey
+                  name: personnel_number
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: firstname
+                  type: VARCHAR(64)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: lastname
+                  type: VARCHAR(64)
+              - column:
+                  name: patronymic
+                  type: VARCHAR(64)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: telephone_number
+                  type: VARCHAR(255)
+            tableName: employee
+  - changeSet:
+      id: create_table_vacancy
+      author: DipDeepCode
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: salary
+                  type: FLOAT4
+              - column:
+                  constraints:
+                    nullable: false
+                  name: department_id
+                  type: BIGINT
+              - column:
+                  name: employee_personnel_number
+                  type: BIGINT
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: vacancy_pkey
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: position
+                  type: VARCHAR(64)
+            tableName: vacancy
+  - changeSet:
+      id: add_unique_constraint_department_name_key
+      author: DipDeepCode
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: department_name_key
+            tableName: department
+  - changeSet:
+      id: add_unique_constraint_department_number_key
+      author: DipDeepCode
+      changes:
+        - addUniqueConstraint:
+            columnNames: number
+            constraintName: department_number_key
+            tableName: department
+  - changeSet:
+      id: add_unique_constraint_employee_personnel_number
+      author: DipDeepCode
+      changes:
+        - addUniqueConstraint:
+            columnNames: employee_personnel_number
+            constraintName: vacancy_employee_personnel_number_key
+            tableName: vacancy
+  - changeSet:
+      id: add_foreign_key_constraint_employee_personnel_number
+      author: DipDeepCode
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: employee_personnel_number
+            baseTableName: vacancy
+            constraintName: fk63c7fbvpf8pdrhuaikud0fcnd
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: personnel_number
+            referencedTableName: employee
+            validate: true
+  - changeSet:
+      id: add_foreign_key_constraint_department_id
+      author: DipDeepCode
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: department_id
+            baseTableName: vacancy
+            constraintName: fktm7dwgrn1poojmxdb3mn62o83
+            deferrable: false
+            initiallyDeferred: false
+            onDelete: NO ACTION
+            onUpdate: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: department
+            validate: true
+
