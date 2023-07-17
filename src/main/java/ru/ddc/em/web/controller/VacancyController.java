@@ -47,7 +47,7 @@ public class VacancyController {
         List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyPage, VacancyDto.class);
         model.addAttribute("vacancies", vacancyDtoList);
         model.addAttribute("isVacanciesOnlyOfTheSameDepartment", false);
-        return "vacancies";
+        return "vacancy/vacancies";
     }
 
     @GetMapping("/{departmentId}")
@@ -62,7 +62,7 @@ public class VacancyController {
         model.addAttribute("vacancies", vacancyDtoList);
 
         model.addAttribute("isVacanciesOnlyOfTheSameDepartment", true);
-        return "vacancies";
+        return "vacancy/vacancies";
     }
 
     @GetMapping("/addForm/{departmentId}")
@@ -70,7 +70,7 @@ public class VacancyController {
                               VacancyDto vacancyDto,
                               Model model) {
         addDepartmentAndListOfEmployeesToModel(model, departmentId);
-        return "add-vacancy";
+        return "vacancy/add-vacancy";
     }
 
     @PostMapping("/add")
@@ -79,7 +79,7 @@ public class VacancyController {
                              Model model) {
         if (result.hasErrors()) {
             addDepartmentAndListOfEmployeesToModel(model, vacancyDto.getDepartmentDto().getId());
-            return "add-vacancy";
+            return "vacancy/add-vacancy";
         } else {
             if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
                 vacancyDto.setEmployeeDto(null);
@@ -109,7 +109,7 @@ public class VacancyController {
         List<Employee> employeeList = employeeService.findAllNotAssignedToAnyDepartment();
         List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeeList, EmployeeDto.class);
         model.addAttribute("employees", employeeDtoList);
-        return "update-vacancy";
+        return "vacancy/update-vacancy";
     }
 
     @PostMapping("/update/{id}")
@@ -118,7 +118,7 @@ public class VacancyController {
                                 BindingResult result) {
         if (result.hasErrors()) {
             vacancyDto.setId(id);
-            return "update-vacancy";
+            return "vacancy/update-vacancy";
         } else {
             if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
                 vacancyDto.setEmployeeDto(null);

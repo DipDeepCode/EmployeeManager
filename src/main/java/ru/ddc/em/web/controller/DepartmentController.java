@@ -36,18 +36,18 @@ public class DepartmentController {
         Page<Department> departmentPage = departmentService.findAll(0, 10);
         List<DepartmentDto> departmentDtoList = mapper.mapIterable(departmentPage, DepartmentDto.class);
         model.addAttribute("departments", departmentDtoList);
-        return "departments";
+        return "department/departments";
     }
 
     @GetMapping("/addForm")
     public String showAddForm(DepartmentDto departmentDto) {
-        return "add-department";
+        return "department/add-department";
     }
 
     @PostMapping("/add")
     public String addDepartment(@Valid DepartmentDto departmentDto, BindingResult result) {
         if (result.hasErrors()) {
-            return "add-department";
+            return "department/add-department";
         } else {
             departmentService.save(mapper.map(departmentDto, Department.class));
             return "redirect:/departments";
@@ -58,14 +58,14 @@ public class DepartmentController {
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         DepartmentDto departmentDto = mapper.map(departmentService.findById(id), DepartmentDto.class);
         model.addAttribute("department", departmentDto);
-        return "update-department";
+        return "department/update-department";
     }
 
     @PostMapping("/update/{id}")
     public String updateDepartment(@PathVariable("id") Long id, @Valid DepartmentDto departmentDto, BindingResult result) {
         if (result.hasErrors()) {
             departmentDto.setId(id);
-            return "update-department";
+            return "department/update-department";
         } else {
             departmentService.save(mapper.map(departmentDto, Department.class));
             return "redirect:/departments";
