@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.ddc.em.persistence.model.Vacancy;
+import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.web.dto.VacancyDto;
 
 @Configuration

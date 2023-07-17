@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.ddc.em.persistence.model.Vacancy;
+import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.persistence.dao.VacancyRepository;
 import ru.ddc.em.web.error.DeleteEntityError;
 

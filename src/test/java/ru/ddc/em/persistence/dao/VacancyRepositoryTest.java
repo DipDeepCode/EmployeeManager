@@ -7,8 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ru.ddc.em.persistence.model.Department;
-import ru.ddc.em.persistence.model.Vacancy;
+import ru.ddc.em.persistence.entity.Department;
+import ru.ddc.em.persistence.entity.Vacancy;
 
 import java.util.List;
 import java.util.Optional;

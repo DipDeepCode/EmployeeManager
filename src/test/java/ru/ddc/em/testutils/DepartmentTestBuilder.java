@@ -3,8 +3,8 @@ package ru.ddc.em.testutils;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import ru.ddc.em.persistence.model.Department;
-import ru.ddc.em.persistence.model.Vacancy;
+import ru.ddc.em.persistence.entity.Department;
+import ru.ddc.em.persistence.entity.Vacancy;
 
 import java.util.ArrayList;
 import java.util.List;

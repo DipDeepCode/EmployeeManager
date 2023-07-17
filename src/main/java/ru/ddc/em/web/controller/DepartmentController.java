@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.ddc.em.persistence.model.Department;
+import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.service.DepartmentService;
 import ru.ddc.em.utils.custommapper.CustomMapper;
 import ru.ddc.em.web.dto.DepartmentDto;

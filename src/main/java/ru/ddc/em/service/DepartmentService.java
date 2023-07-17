@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.ddc.em.persistence.model.Department;
+import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.persistence.dao.DepartmentRepository;
 import org.springframework.data.domain.Sort;
 import ru.ddc.em.web.error.DeleteEntityError;

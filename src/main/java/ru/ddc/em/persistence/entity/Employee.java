@@ -1,4 +1,4 @@
-package ru.ddc.em.persistence.model;
+package ru.ddc.em.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
