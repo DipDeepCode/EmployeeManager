@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "employee")
 public class Employee {
-    public static final Sort defaultSort = Sort.by("lastname", "firstname", "patronymic").ascending();
+    public static final Sort defaultSort = Sort.by("personnelNumber").ascending();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
