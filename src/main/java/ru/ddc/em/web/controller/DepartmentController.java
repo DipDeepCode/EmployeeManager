@@ -6,10 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.service.DepartmentService;
 import ru.ddc.em.utils.custommapper.CustomMapper;
@@ -32,47 +29,47 @@ public class DepartmentController {
     }
 
     @GetMapping
-    public String showDepartmentList(Model model) {
+    public String all(Model model) {
         Page<Department> departmentPage = departmentService.findAll(0, 10);
         List<DepartmentDto> departmentDtoList = mapper.mapIterable(departmentPage, DepartmentDto.class);
         model.addAttribute("departments", departmentDtoList);
-        return "department/departments";
+        return "department/all";
     }
 
-    @GetMapping("/addForm")
-    public String showAddForm(DepartmentDto departmentDto) {
-        return "department/add-department";
+    @GetMapping("/new")
+    public String showNewDepartmentForm(@ModelAttribute("department") DepartmentDto departmentDto) {
+        return "department/new";
     }
 
-    @PostMapping("/add")
-    public String addDepartment(@Valid DepartmentDto departmentDto, BindingResult result) {
+    @PostMapping
+    public String saveNewDepartment(@Valid DepartmentDto departmentDto, BindingResult result) {
         if (result.hasErrors()) {
-            return "department/add-department";
+            return "department/new";
         } else {
             departmentService.save(mapper.map(departmentDto, Department.class));
             return "redirect:/departments";
         }
     }
 
-    @GetMapping("/updateForm/{id}")
-    public String showUpdateForm(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/{id}/edit")
+    public String showUpdateDepartmentForm(@PathVariable("id") Long id, Model model) {
         DepartmentDto departmentDto = mapper.map(departmentService.findById(id), DepartmentDto.class);
         model.addAttribute("department", departmentDto);
-        return "department/update-department";
+        return "department/edit";
     }
 
-    @PostMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public String updateDepartment(@PathVariable("id") Long id, @Valid DepartmentDto departmentDto, BindingResult result) {
         if (result.hasErrors()) {
             departmentDto.setId(id);
-            return "department/update-department";
+            return "department/edit";
         } else {
             departmentService.save(mapper.map(departmentDto, Department.class));
             return "redirect:/departments";
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteDepartment(@PathVariable("id") Long id) throws DeleteEntityError {
         departmentService.deleteById(id);
         return "redirect:/departments";

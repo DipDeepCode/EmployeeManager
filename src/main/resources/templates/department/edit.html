@@ -26,7 +26,7 @@
                     </button>
                 </div>
             </div>
-            <form action="#" th:action="@{/departments/update/{id}(id=${department.id})}" th:object="${department}" method="post">
+            <form action="#" th:action="@{/departments/{id}(id=${department.id})}" th:object="${department}" th:method="PATCH">
                 <div class="row">
                     <div class="form-group col-md-10">
                         <label for="number" class="col-form-label">Номер отдела</label>
