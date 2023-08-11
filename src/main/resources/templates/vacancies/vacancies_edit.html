@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Изменить вакансию</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+        integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/css/shards.min.css}">
+</head>
+<body>
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-10">
+      <h3 class="my-5">Изменить вакансию отдела
+        <span th:text="${vacancy.departmentDto.number}"></span>
+        <br>
+        <span th:text="${vacancy.departmentDto.name}"></span>
+      </h3>
+      <div class="row">
+        <div class="column-left">
+          <p class="my-1"></p>
+        </div>
+        <div class="column-right">
+          <a th:href="@{/vacancies/{id}(id=${vacancy.id})}" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-window-close"></i>
+          </a>
+          <!--          <button class="btn btn-outline-primary btn-sm" onclick="history.back()">-->
+          <!--            <i class="fa fa-window-close"></i>-->
+          <!--          </button>-->
+        </div>
+      </div>
+      <form action="#" th:action="@{/vacancies/{id}(id=${vacancy.id})}" th:object="${vacancy}" th:method="PATCH">
+        <div class="row">
+          <div class="form-group col-md-10">
+            <input type="hidden" th:field="*{departmentDto.number}" class="form-control" id="departmentNumber">
+            <span th:if="${#fields.hasErrors('departmentDto.number')}" th:errors="*{departmentDto.number}"
+                  class="text-danger"></span>
+          </div>
+          <div class="form-group col-md-10">
+            <input type="hidden" th:field="*{departmentDto.id}" class="form-control" id="departmentId">
+            <span th:if="${#fields.hasErrors('departmentDto.id')}" th:errors="*{departmentDto.id}"
+                  class="text-danger"></span>
+          </div>
+          <div class="form-group col-md-10">
+            <label for="position" class="col-form-label">Должность</label>
+            <input type="text" th:field="*{position}" class="form-control" id="position">
+            <span th:if="${#fields.hasErrors('position')}" th:errors="*{position}" class="text-danger"></span>
+          </div>
+          <div class="form-group col-md-10">
+            <label for="salary" class="col-form-label">Оклад</label>
+            <input type="number" th:field="*{salary}" class="form-control" id="salary">
+            <span th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}" class="text-danger"></span>
+          </div>
+          <div class="form-group col-md-10">
+            <label for="employeePersonnelNumber" class="col-form-label">Работник</label>
+            <select class="form-control selectpicker" th:field="*{employeeDto.personnelNumber}"
+                    id="employeePersonnelNumber">
+              <option value="-1">Вакансия свободна</option>
+              <option th:if="*{employeeDto.personnelNumber != null}"
+                      th:value="*{employeeDto.personnelNumber}"
+                      th:text="|*{employeeDto.lastname} *{employeeDto.firstname} *{employeeDto.patronymic}|"
+                      selected></option>
+              <option th:each="employee : ${employees}"
+                      th:text="|${employee.lastname} ${employee.firstname} ${employee.patronymic}|"
+                      th:value="${employee.personnelNumber}">
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mt-5">
+            <input type="submit" class="btn btn-primary btn-sm" value="Изменить">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

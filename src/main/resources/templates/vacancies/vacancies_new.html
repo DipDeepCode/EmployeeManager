@@ -2,7 +2,8 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Добавить вакансию</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
@@ -15,21 +16,38 @@
 <div class="container my-5">
   <div class="row">
     <div class="col-md-10">
-      <h3 class="my-5">Новая вакансия для отдела <span th:text="${department.number}"></span>
-        <br><span th:text="${department.name}"></span>
+      <h3 class="my-5">Новая вакансия
+        <!--        для отдела -->
+        <!--        <span th:text="${department.number}"></span>-->
+        <!--        <br><span th:text="${department.name}"></span>-->
       </h3>
       <div class="row">
         <div class="column-left">
           <p class="my-1"></p>
         </div>
         <div class="column-right">
-          <button class="btn btn-outline-primary btn-sm" onclick="history.back()">
+          <a th:href="@{/vacancies}" class="btn btn-outline-primary btn-sm">
             <i class="fa fa-window-close"></i>
-          </button>
+          </a>
+          <!--          <button class="btn btn-outline-primary btn-sm" onclick="history.back()">-->
+          <!--            <i class="fa fa-window-close"></i>-->
+          <!--          </button>-->
         </div>
       </div>
-      <form action="#" th:action="@{/vacancies/add}" th:object="${vacancyDto}" method="post">
+      <form action="#" th:action="@{/vacancies}" th:object="${vacancy}" method="POST">
         <div class="row">
+          <div class="form-group col-md-10">
+            <label for="departmentDto.id" class="col-form-label">Отдел</label>
+            <!--            <input type="number" th:field="*{departmentDto.id}" class="form-control" id="departmentDto.id">-->
+            <!--            <span th:if="${#fields.hasErrors('departmentDto.id')}" th:errors="*{departmentDto.id}" class="text-danger"></span>-->
+            <select autofocus class="form-control selectpicker" th:field="*{departmentDto.id}" id="departmentDto.id">
+              <option value="">--Выберите отдел--</option>
+              <option th:each="department : ${departments}"
+                      th:text="|${department.number} ${department.name}|"
+                      th:value="${department.id}">
+              </option>
+            </select>
+          </div>
           <div class="form-group col-md-10">
             <label for="position" class="col-form-label">Должность</label>
             <input type="text" th:field="*{position}" class="form-control" id="position">
@@ -42,7 +60,8 @@
           </div>
           <div class="form-group col-md-10">
             <label for="employeeDto.personnelNumber" class="col-form-label">Сотрудник</label>
-            <select class="form-control selectpicker" th:field="*{employeeDto.personnelNumber}" id="employeeDto.personnelNumber">
+            <select class="form-control selectpicker" th:field="*{employeeDto.personnelNumber}"
+                    id="employeeDto.personnelNumber">
               <option value="-1">Вакансия свободна</option>
               <option th:each="employee : ${employees}"
                       th:text="|${employee.lastname} ${employee.firstname} ${employee.patronymic}|"
@@ -50,7 +69,7 @@
               </option>
             </select>
           </div>
-          <input type="hidden" th:value="${department.id}" name="departmentDto.id" id="departmentDto.id">
+          <!--          <input type="hidden" th:value="${department.id}" name="departmentDto.id" id="departmentDto.id">-->
         </div>
         <div class="row">
           <div class="col-md-6 mt-5">

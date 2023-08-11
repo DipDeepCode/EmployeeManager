@@ -3,6 +3,7 @@ package ru.ddc.em.web.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,51 +43,82 @@ public class VacancyController {
     }
 
     @GetMapping
-    public String showVacancyList(Model model) {
+    public String showAllVacancies(Model model) {
         Page<Vacancy> vacancyPage = vacancyService.findAll(0, 10);
         List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyPage, VacancyDto.class);
         model.addAttribute("vacancies", vacancyDtoList);
-        model.addAttribute("isVacanciesOnlyOfTheSameDepartment", false);
-        return "vacancy/vacancies";
+        return "vacancies/vacancies_all";
     }
 
-    @GetMapping("/{departmentId}")
-    public String showVacancyList(@PathVariable("departmentId") Long departmentId,
-                                  Model model) {
-        Department department = departmentService.findById(departmentId);
+    @GetMapping("/byDepartment/{dID}")
+    public String showAllVacanciesByDepartment(@PathVariable("dID") Long dID,
+                                               Model model) {
+        Department department = departmentService.findById(dID);
         DepartmentDto departmentDto = mapper.map(department, DepartmentDto.class);
         model.addAttribute("department", departmentDto);
 
-        Page<Vacancy> vacancyPage = vacancyService.findByDepartmentId(departmentId, 0, 10);
+        Page<Vacancy> vacancyPage = vacancyService.findByDepartmentId(dID, 0, 10);
         List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyPage, VacancyDto.class);
         model.addAttribute("vacancies", vacancyDtoList);
-
-        model.addAttribute("isVacanciesOnlyOfTheSameDepartment", true);
-        return "vacancy/vacancies";
+        return "vacancies/vacancies_byDepartment";
     }
 
-    @GetMapping("/addForm/{departmentId}")
-    public String showAddForm(@PathVariable("departmentId") Long departmentId,
-                              VacancyDto vacancyDto,
-                              Model model) {
-        addDepartmentAndListOfEmployeesToModel(model, departmentId);
-        return "vacancy/add-vacancy";
+    @GetMapping("{id}")
+    public String showOneVacancy(@PathVariable("id") Long id,
+                                 Model model) {
+        Vacancy vacancy = vacancyService.findById(id);
+        VacancyDto vacancyDto = mapper.map(vacancy, VacancyDto.class);
+        model.addAttribute("vacancy", vacancyDto);
+        return "vacancies/vacancies_one";
     }
 
-    @PostMapping("/add")
-    public String addVacancy(@Valid VacancyDto vacancyDto,
+//    @GetMapping("/{departmentId}")
+//    public String allByDepartmentId(@PathVariable("departmentId") Long departmentId,
+//                                    Model model) {
+//        Department department = departmentService.findById(departmentId);
+//        DepartmentDto departmentDto = mapper.map(department, DepartmentDto.class);
+//        model.addAttribute("department", departmentDto);
+//
+//        Page<Vacancy> vacancyPage = vacancyService.findByDepartmentId(departmentId, 0, 10);
+//        List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyPage, VacancyDto.class);
+//        model.addAttribute("vacancies", vacancyDtoList);
+//
+//        model.addAttribute("isVacanciesOnlyOfTheSameDepartment", true);
+//        return "vacancy/all";
+//    }
+
+    @GetMapping("/new")
+    public String showNewVacancyForm(@ModelAttribute("vacancy") VacancyDto vacancyDto,
+                                     Model model) {
+//        addDepartmentAndListOfEmployeesToModel(model, departmentId);
+        List<Employee> employeePage = employeeService.findAllNotAssignedToAnyDepartment();
+        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
+        model.addAttribute("employees", employeeDtoList);
+
+        List<Department> departmentList = departmentService.findAll(Sort.by("number").ascending());
+        List<DepartmentDto> departmentDtoList = mapper.mapIterable(departmentList, DepartmentDto.class);
+        model.addAttribute("departments", departmentDtoList);
+        return "vacancies/vacancies_new";
+    }
+
+    @PostMapping
+    public String saveNewVacancy(@Valid VacancyDto vacancyDto,
                              BindingResult result,
                              Model model) {
         if (result.hasErrors()) {
             addDepartmentAndListOfEmployeesToModel(model, vacancyDto.getDepartmentDto().getId());
-            return "vacancy/add-vacancy";
+            return "vacancies/vacancies_new";
         } else {
+
             if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
                 vacancyDto.setEmployeeDto(null);
             }
+            System.out.println(vacancyDto);
+            System.out.println(vacancyDto.getDepartmentDto());
+            System.out.println(vacancyDto.getEmployeeDto());
             Vacancy vacancy = mapper.map(vacancyDto, Vacancy.class);
             vacancyService.save(vacancy);
-            return "redirect:/vacancies/" + vacancyDto.getDepartmentDto().getId();
+            return "redirect:/vacancies";
         }
     }
 
@@ -100,8 +132,8 @@ public class VacancyController {
         model.addAttribute("employees", employeeDtoList);
     }
 
-    @GetMapping("/updateForm/{id}")
-    public String showUpdateForm(@PathVariable("id") Long id,
+    @GetMapping("/{id}/edit")
+    public String showUpdateVacancyForm(@PathVariable("id") Long id,
                                  Model model) {
         Vacancy vacancy = vacancyService.findById(id);
         VacancyDto vacancyDto = mapper.map(vacancy, VacancyDto.class);
@@ -109,31 +141,31 @@ public class VacancyController {
         List<Employee> employeeList = employeeService.findAllNotAssignedToAnyDepartment();
         List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeeList, EmployeeDto.class);
         model.addAttribute("employees", employeeDtoList);
-        return "vacancy/update-vacancy";
+        return "vacancies/vacancies_edit";
     }
 
-    @PostMapping("/update/{id}")
+    @PatchMapping("/{id}")
     public String updateVacancy(@PathVariable("id") Long id,
                                 @Valid VacancyDto vacancyDto,
                                 BindingResult result) {
         if (result.hasErrors()) {
             vacancyDto.setId(id);
-            return "vacancy/update-vacancy";
+            return "vacancies/vacancies_edit";
         } else {
             if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
                 vacancyDto.setEmployeeDto(null);
             }
             Vacancy vacancy = mapper.map(vacancyDto, Vacancy.class);
             vacancyService.save(vacancy);
-            return "redirect:/vacancies/" + vacancyDto.getDepartmentDto().getId();
+            return "redirect:/vacancies/" + vacancyDto.getId();
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public String deleteVacancy(@PathVariable("id") Long id) throws DeleteEntityError {
         Vacancy vacancy = vacancyService.findById(id);
         Long departmentId = vacancy.getDepartment().getId();
         vacancyService.deleteById(id);
-        return "redirect:/vacancies/" + departmentId;
+        return "redirect:/vacancies";
     }
 }

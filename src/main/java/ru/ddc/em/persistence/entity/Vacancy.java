@@ -12,7 +12,7 @@ import org.springframework.data.domain.Sort;
 @Entity
 @Table(name = "vacancy")
 public class Vacancy {
-    public static final Sort defaultSort = Sort.by("position").ascending();
+    public static final Sort defaultSort = Sort.by("department_number", "position").ascending();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class Vacancy {
 
     @ToString.Exclude
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employee_personnel_number")
+    @JoinColumn(name = "employee_personnel_number", unique = true)
     private Employee employee;
 
 }
