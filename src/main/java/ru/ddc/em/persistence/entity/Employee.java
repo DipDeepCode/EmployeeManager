@@ -1,11 +1,10 @@
-package ru.ddc.em.persistence.model;
+package ru.ddc.em.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "employee")
 public class Employee {
-    public static final Sort defaultSort = Sort.by("lastname", "firstname", "patronymic").ascending();
+    public static final Sort defaultSort = Sort.by("personnelNumber").ascending();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +31,6 @@ public class Employee {
     private String patronymic;
 
     @Column(name = "birthdate")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate birthdate;
 
     @Column(name = "email")

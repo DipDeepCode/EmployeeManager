@@ -7,8 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ru.ddc.em.persistence.model.Department;
-import ru.ddc.em.persistence.model.Vacancy;
+import ru.ddc.em.persistence.entity.Department;
+import ru.ddc.em.persistence.entity.Vacancy;
 
 import java.util.List;
 import java.util.Optional;
@@ -76,6 +76,20 @@ public class VacancyRepositoryTest {
         Vacancy vacancy = aVacancy().build();
         showVacancy(vacancy);
         assertThrows(DataIntegrityViolationException.class, () -> vacancyRepository.saveAndFlush(vacancy));
+    }
+
+    @Test
+    public void whenSaveVacancyWithoutEmployee_thenWithoutThrowingException() {
+        Department department = departmentRepository.findById(1L).orElseThrow();
+        Vacancy vacancy = aVacancy()
+                .withId(1L)
+                .withPosition("position")
+                .withSalary(100f)
+                .withDepartment(department)
+                .withEmployee(null)
+                .build();
+        showVacancy(vacancy);
+        assertDoesNotThrow(() -> vacancyRepository.saveAndFlush(vacancy));
     }
 
     @Test

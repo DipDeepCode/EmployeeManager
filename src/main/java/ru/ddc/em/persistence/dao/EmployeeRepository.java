@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.ddc.em.persistence.model.Employee;
+import ru.ddc.em.persistence.entity.Employee;
 
 import java.util.List;
 import java.util.Optional;

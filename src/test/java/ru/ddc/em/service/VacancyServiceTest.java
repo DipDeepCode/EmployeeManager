@@ -8,7 +8,7 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import ru.ddc.em.persistence.dao.VacancyRepository;
-import ru.ddc.em.persistence.model.Vacancy;
+import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.testutils.EmployeeTestBuilder;
 import ru.ddc.em.web.error.DeleteEntityError;
 

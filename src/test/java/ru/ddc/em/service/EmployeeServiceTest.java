@@ -8,8 +8,8 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import ru.ddc.em.persistence.dao.EmployeeRepository;
-import ru.ddc.em.persistence.model.Department;
-import ru.ddc.em.persistence.model.Employee;
+import ru.ddc.em.persistence.entity.Department;
+import ru.ddc.em.persistence.entity.Employee;
 
 import java.util.List;
 import java.util.NoSuchElementException;

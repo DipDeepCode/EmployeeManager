@@ -4,10 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.ddc.em.persistence.model.Department;
+import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.persistence.dao.DepartmentRepository;
 import org.springframework.data.domain.Sort;
 import ru.ddc.em.web.error.DeleteEntityError;
+
+import java.util.List;
 
 @Service
 public class DepartmentService {
@@ -16,6 +18,10 @@ public class DepartmentService {
 
     public DepartmentService(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
+    }
+
+    public List<Department> findAll(Sort sort) {
+        return departmentRepository.findAll(sort);
     }
 
     public Page<Department> findAll(Integer pageNo, Integer pageSize, Sort sortBy) {
