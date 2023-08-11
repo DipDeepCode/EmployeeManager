@@ -16,11 +16,13 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
+                    unique: true
                   name: number
                   type: VARCHAR(32)
               - column:
                   constraints:
                     nullable: false
+                    unique: true
                   name: name
                   type: VARCHAR(64)
             tableName: department
@@ -78,6 +80,8 @@ databaseChangeLog:
                   name: department_id
                   type: BIGINT
               - column:
+                  constraints:
+                    unique: true
                   name: employee_personnel_number
                   type: BIGINT
               - column:
@@ -95,37 +99,13 @@ databaseChangeLog:
                   type: VARCHAR(64)
             tableName: vacancy
   - changeSet:
-      id: add_unique_constraint_department_name_key
-      author: DipDeepCode
-      changes:
-        - addUniqueConstraint:
-            columnNames: name
-            constraintName: department_name_key
-            tableName: department
-  - changeSet:
-      id: add_unique_constraint_department_number_key
-      author: DipDeepCode
-      changes:
-        - addUniqueConstraint:
-            columnNames: number
-            constraintName: department_number_key
-            tableName: department
-  - changeSet:
-      id: add_unique_constraint_employee_personnel_number
-      author: DipDeepCode
-      changes:
-        - addUniqueConstraint:
-            columnNames: employee_personnel_number
-            constraintName: vacancy_employee_personnel_number_key
-            tableName: vacancy
-  - changeSet:
-      id: add_foreign_key_constraint_employee_personnel_number
+      id: add_foreign_key_vacancy_employee
       author: DipDeepCode
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: employee_personnel_number
             baseTableName: vacancy
-            constraintName: fk63c7fbvpf8pdrhuaikud0fcnd
+            constraintName: fk_vacancy_employee
             deferrable: false
             initiallyDeferred: false
             onDelete: NO ACTION
@@ -134,13 +114,13 @@ databaseChangeLog:
             referencedTableName: employee
             validate: true
   - changeSet:
-      id: add_foreign_key_constraint_department_id
+      id: add_foreign_key_vacancy_department
       author: DipDeepCode
       changes:
         - addForeignKeyConstraint:
             baseColumnNames: department_id
             baseTableName: vacancy
-            constraintName: fktm7dwgrn1poojmxdb3mn62o83
+            constraintName: fk_vacancy_department
             deferrable: false
             initiallyDeferred: false
             onDelete: NO ACTION
