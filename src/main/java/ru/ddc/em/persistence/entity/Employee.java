@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -32,7 +31,6 @@ public class Employee {
     private String patronymic;
 
     @Column(name = "birthdate")
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
     private LocalDate birthdate;
 
     @Column(name = "email")
