@@ -7,10 +7,10 @@ import org.mockito.Mock;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import ru.ddc.em.exceptions.DeleteEntityException;
 import ru.ddc.em.persistence.dao.VacancyRepository;
 import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.testutils.EmployeeTestBuilder;
-import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -140,6 +140,6 @@ class VacancyServiceTest {
                 .withEmployee(EmployeeTestBuilder.aEmployee().build())
                 .build();
         when(vacancyRepository.findById(anyLong())).thenReturn(Optional.of(vacancy));
-        assertThrows(DeleteEntityError.class, () -> vacancyService.deleteById(anyLong()));
+        assertThrows(DeleteEntityException.class, () -> vacancyService.deleteById(anyLong()));
     }
 }

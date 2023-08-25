@@ -28,4 +28,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, Long> {
 
     @EntityGraph(attributePaths = {"department", "employee"})
     Optional<Vacancy> findById(@Nonnull Long id);
+
+    @EntityGraph(attributePaths = {"department"})
+    List<Vacancy> findByEmployeeNull();
 }
