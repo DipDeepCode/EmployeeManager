@@ -7,10 +7,10 @@ import org.mockito.Mock;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
+import ru.ddc.em.exceptions.DeleteEntityException;
 import ru.ddc.em.persistence.dao.DepartmentRepository;
 import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.persistence.entity.Vacancy;
-import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +141,6 @@ class DepartmentServiceTest {
                 .withVacancyList(List.of(new Vacancy()))
                 .build();
         when(departmentRepository.findById(anyLong())).thenReturn(Optional.of(department));
-        assertThrows(DeleteEntityError.class, () -> departmentService.deleteById(anyLong()));
+        assertThrows(DeleteEntityException.class, () -> departmentService.deleteById(anyLong()));
     }
 }

@@ -13,7 +13,6 @@ import ru.ddc.em.service.DepartmentService;
 import ru.ddc.em.utils.custommapper.CustomMapper;
 import ru.ddc.em.web.dto.DepartmentDto;
 import ru.ddc.em.web.dto.VacancyDto;
-import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.List;
 
@@ -75,7 +74,7 @@ public class DepartmentController {
     }
 
     @DeleteMapping("/{id}")
-    public String destroy(@PathVariable("id") Long id) throws DeleteEntityError {
+    public String destroy(@PathVariable("id") Long id) {
         departmentService.deleteById(id);
         return "redirect:/departments";
     }

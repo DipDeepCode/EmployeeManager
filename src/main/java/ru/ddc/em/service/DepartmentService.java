@@ -4,10 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.ddc.em.exceptions.DeleteEntityException;
 import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.persistence.dao.DepartmentRepository;
 import org.springframework.data.domain.Sort;
-import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.List;
 
@@ -46,12 +46,12 @@ public class DepartmentService {
         return departmentRepository.findById(id).orElseThrow();
     }
 
-    public void deleteById(Long id) throws DeleteEntityError {
+    public void deleteById(Long id) {
         Department department = departmentRepository.findById(id).orElseThrow();
-        if (department.getVacancies().size() == 0) {
+        if (department.getVacancies().isEmpty()) {
             departmentRepository.deleteById(id);
         } else {
-            throw new DeleteEntityError("Нельзя удалить отдел, так как он имеет вакансии");
+            throw new DeleteEntityException("Нельзя удалить отдел, так как он имеет вакансии");
         }
     }
 }
