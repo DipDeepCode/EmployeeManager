@@ -1,84 +1,82 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
   <title>Добавить сотрудника</title>
-  <th:block th:include="fragments/general.html :: headerfiles"></th:block>
+  <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
 </head>
-<body>
 
-<div class="container my-4 w-50 border">
+<body class="container">
 
+<th:block th:insert="~{fragments/general :: navbar(activelink='employees')}"></th:block>
+
+<div class="my-4">
   <div class="row">
     <div class="col">
-      <div class="my-4">
-        <h3>Новый сотрудник</h3>
-      </div>
+      <h3>Добавить сотрудника</h3>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <div class="my-4 float-right">
+    <div class="col align-self-end">
+      <div class="float-right">
         <a th:href="@{/employees}" class="btn btn-outline-primary btn-sm">
-          <i class="fa fa-window-close"></i>
+          <i class="fa fa-window-close"></i> Отмена
         </a>
       </div>
     </div>
   </div>
+</div>
 
+<div class="my-4">
   <div class="row">
     <div class="col">
-      <div class="my-4">
-        <form action="#" th:action="@{/employees}" th:object="${employee}" method="post">
+      <form action="#" th:action="@{/employees}" th:object="${employee}" method="post">
 
-          <div class="form-group">
-            <label for="lastname">Фамилия</label>
-            <input type="text" th:field="*{lastname}" class="form-control" id="lastname" required autofocus>
-            <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="text-danger"></span>
-          </div>
+        <div class="form-group">
+          <label for="lastname">Фамилия</label>
+          <input type="text" th:field="*{lastname}" class="form-control" id="lastname" required autofocus>
+          <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="text-danger"></span>
+        </div>
 
-          <div class="form-group">
-            <label for="firstname">Имя</label>
-            <input type="text" th:field="*{firstname}" class="form-control" id="firstname" required>
-            <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="text-danger"></span>
-          </div>
+        <div class="form-group">
+          <label for="firstname">Имя</label>
+          <input type="text" th:field="*{firstname}" class="form-control" id="firstname" required>
+          <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="text-danger"></span>
+        </div>
 
-          <div class="form-group">
-            <label for="patronymic">Отчество</label>
-            <input type="text" th:field="*{patronymic}" class="form-control" id="patronymic" required>
-            <span th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}" class="text-danger"></span>
-          </div>
+        <div class="form-group">
+          <label for="patronymic">Отчество</label>
+          <input type="text" th:field="*{patronymic}" class="form-control" id="patronymic" required>
+          <span th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}" class="text-danger"></span>
+        </div>
 
-          <div class="form-group">
-            <label for="birthdate">Дата рождения</label>
-            <input type="date" th:field="*{birthdate}" class="form-control" id="birthdate" required>
-            <span th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}" class="text-danger"></span>
-          </div>
+        <div class="form-group">
+          <label for="birthdate">Дата рождения</label>
+          <input type="date" th:field="*{birthdate}" class="form-control" id="birthdate" required>
+          <span th:if="${#fields.hasErrors('birthdate')}" th:errors="*{birthdate}" class="text-danger"></span>
+        </div>
 
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" th:field="*{email}" class="form-control" id="email" required>
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
-          </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" th:field="*{email}" class="form-control" id="email" required>
+          <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
+        </div>
 
-          <div class="form-group">
-            <label for="telephoneNumber">Номер телефона</label>
-            <input type="tel" th:field="*{telephoneNumber}" class="form-control" id="telephoneNumber" required>
-            <span th:if="${#fields.hasErrors('telephoneNumber')}" th:errors="*{telephoneNumber}"
-                  class="text-danger"></span>
-          </div>
+        <div class="form-group">
+          <label for="telephoneNumber">Номер телефона</label>
+          <input type="tel" th:field="*{telephoneNumber}" class="form-control" id="telephoneNumber" required>
+          <span th:if="${#fields.hasErrors('telephoneNumber')}" th:errors="*{telephoneNumber}"
+                class="text-danger"></span>
+        </div>
 
-          <div class="form-group">
-            <button type="submit" class="btn btn-outline-primary btn-sm">
-              <i class="fa fa-save"></i> Добавить
-            </button>
-          </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-save"></i> Добавить
+          </button>
+        </div>
 
-        </form>
-      </div>
+      </form>
     </div>
   </div>
-
 </div>
+
 </body>
 </html>

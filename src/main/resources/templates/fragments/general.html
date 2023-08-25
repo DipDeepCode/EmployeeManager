@@ -11,7 +11,29 @@
         integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
   <link rel="stylesheet" th:href="@{/css/shards.min.css}">
 </head>
-<body>
+<body class="container border">
+
+<th:block th:fragment="navbar (activelink)">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a th:href="@{/}">
+      <img th:src="@{../../images/employee.png}" width="52" height="52" alt="">
+    </a>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link mb-0 h4" th:classappend="${activelink} == departments ? active"
+           th:href="@{/departments}">Отделы</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link mb-0 h4" th:classappend="${activelink} == vacancies ? active"
+           th:href="@{/vacancies}">Вакансии</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link mb-0 h4" th:classappend="${activelink} == employees ? active"
+           th:href="@{/employees}">Сотрудники</a>
+      </li>
+    </ul>
+  </nav>
+</th:block>
 
 </body>
 </html>
