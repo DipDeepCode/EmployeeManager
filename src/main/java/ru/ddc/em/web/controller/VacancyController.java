@@ -18,7 +18,6 @@ import ru.ddc.em.utils.custommapper.CustomMapper;
 import ru.ddc.em.web.dto.DepartmentDto;
 import ru.ddc.em.web.dto.EmployeeDto;
 import ru.ddc.em.web.dto.VacancyDto;
-import ru.ddc.em.web.error.DeleteEntityError;
 
 import java.util.List;
 
@@ -101,26 +100,26 @@ public class VacancyController {
         return "vacancies/vacancies_new";
     }
 
-    @PostMapping
-    public String saveNewVacancy(@Valid VacancyDto vacancyDto,
-                             BindingResult result,
-                             Model model) {
-        if (result.hasErrors()) {
-            addDepartmentAndListOfEmployeesToModel(model, vacancyDto.getDepartmentDto().getId());
-            return "vacancies/vacancies_new";
-        } else {
-
-            if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
-                vacancyDto.setEmployeeDto(null);
-            }
-            System.out.println(vacancyDto);
-            System.out.println(vacancyDto.getDepartmentDto());
-            System.out.println(vacancyDto.getEmployeeDto());
-            Vacancy vacancy = mapper.map(vacancyDto, Vacancy.class);
-            vacancyService.save(vacancy);
-            return "redirect:/vacancies";
-        }
-    }
+//    @PostMapping
+//    public String saveNewVacancy(@Valid VacancyDto vacancyDto,
+//                             BindingResult result,
+//                             Model model) {
+//        if (result.hasErrors()) {
+//            addDepartmentAndListOfEmployeesToModel(model, vacancyDto.getDepartmentDto().getId());
+//            return "vacancies/vacancies_new";
+//        } else {
+//
+//            if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
+//                vacancyDto.setEmployeeDto(null);
+//            }
+//            System.out.println(vacancyDto);
+//            System.out.println(vacancyDto.getDepartmentDto());
+//            System.out.println(vacancyDto.getEmployeeDto());
+//            Vacancy vacancy = mapper.map(vacancyDto, Vacancy.class);
+//            vacancyService.save(vacancy);
+//            return "redirect:/vacancies";
+//        }
+//    }
 
     private void addDepartmentAndListOfEmployeesToModel(Model model,
                                                         Long departmentId) {
@@ -144,25 +143,25 @@ public class VacancyController {
         return "vacancies/vacancies_edit";
     }
 
-    @PatchMapping("/{id}")
-    public String updateVacancy(@PathVariable("id") Long id,
-                                @Valid VacancyDto vacancyDto,
-                                BindingResult result) {
-        if (result.hasErrors()) {
-            vacancyDto.setId(id);
-            return "vacancies/vacancies_edit";
-        } else {
-            if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
-                vacancyDto.setEmployeeDto(null);
-            }
-            Vacancy vacancy = mapper.map(vacancyDto, Vacancy.class);
-            vacancyService.save(vacancy);
-            return "redirect:/vacancies/" + vacancyDto.getId();
-        }
-    }
+//    @PatchMapping("/{id}")
+//    public String updateVacancy(@PathVariable("id") Long id,
+//                                @Valid VacancyDto vacancyDto,
+//                                BindingResult result) {
+//        if (result.hasErrors()) {
+//            vacancyDto.setId(id);
+//            return "vacancies/vacancies_edit";
+//        } else {
+//            if (vacancyDto.getEmployeeDto() != null && vacancyDto.getEmployeeDto().getPersonnelNumber() == -1) {
+//                vacancyDto.setEmployeeDto(null);
+//            }
+//            Vacancy vacancy = mapper.map(vacancyDto, Vacancy.class);
+//            vacancyService.save(vacancy);
+//            return "redirect:/vacancies/" + vacancyDto.getId();
+//        }
+//    }
 
     @DeleteMapping("/{id}")
-    public String deleteVacancy(@PathVariable("id") Long id) throws DeleteEntityError {
+    public String deleteVacancy(@PathVariable("id") Long id) {
         Vacancy vacancy = vacancyService.findById(id);
         Long departmentId = vacancy.getDepartment().getId();
         vacancyService.deleteById(id);
