@@ -1,5 +1,6 @@
 package ru.ddc.em.web.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,8 @@ import jakarta.validation.Valid;
 import ru.ddc.em.web.dto.VacancyDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/employees")
@@ -23,6 +26,9 @@ public class EmployeeController {
     private final EmployeeService employeeService;
     private final VacancyService vacancyService;
     private final CustomMapper mapper;
+
+    @Value("${em.employee.page.size}")
+    int size;
 
     public EmployeeController(EmployeeService employeeService,
                               VacancyService vacancyService,
@@ -33,10 +39,18 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String index(Model model) {
-        Page<Employee> employeePage = employeeService.findAll(0, 15);
-        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
-        model.addAttribute("employees", employeeDtoList);
+    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
+                        Model model) {
+        Page<Employee> employeePage = employeeService.findAll(page - 1, size);
+        Page<EmployeeDto> employeeDtoPage = mapper.mapPage(employeePage, EmployeeDto.class);
+        model.addAttribute("employeeDtoPage", employeeDtoPage);
+        int totalPages = employeeDtoPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
         return "employees/employee-index";
     }
 
