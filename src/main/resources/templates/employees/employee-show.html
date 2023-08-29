@@ -1,147 +1,177 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Сотрудник</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
-        integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-  <link rel="stylesheet" th:href="@{/css/shards.min.css}">
+  <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
 </head>
-<body>
 
-<div class="container my-4 w-50 border">
+<body class="container">
 
+<th:block th:insert="~{fragments/general :: navbar(activelink='employees')}"></th:block>
+
+<div class="my-4">
   <div class="row">
-    <div class="col">
-      <div class="my-4">
-        <h3>Сотрудник</h3>
+    <div class="col-md-auto">
+      <h3>
+        <span th:text="${employeeDto.lastname}"></span>
+        <span th:text="${employeeDto.firstname}"></span>
+        <span th:text="${employeeDto.patronymic}"></span>
+        <span th:text="|#${#numbers.formatInteger(employeeDto.personnelNumber,5)}|"></span>
+      </h3>
+      <div th:if="${vacancyDto}">
+        <h5>
+          <span th:text="${vacancyDto.departmentDto.name}"></span>
+          <span th:text="${vacancyDto.departmentDto.number}"></span>
+          <br>
+          <span th:text="${vacancyDto.position}"></span>
+        </h5>
+      </div>
+      <div th:unless="${vacancyDto}">
+        <h5>Сотрудник не закреплен за вакансией</h5>
       </div>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <div class="my-4">
-        <a th:href="@{/employees/{personnelNumber}/edit(personnelNumber=${employee.personnelNumber})}"
-           class="btn btn-outline-primary btn-sm">
-          <i class="fa fa-edit"></i> Изменить
-        </a>
-      </div>
-    </div>
-    <div class="col">
-      <div class="my-4 float-right">
+    <div class="col align-self-end">
+      <div class="float-right">
         <a th:href="@{/employees}" class="btn btn-outline-primary btn-sm">
-          <i class="fa fa-window-close"></i>
+          <i class="fa fa-window-close"></i> Назад
         </a>
       </div>
     </div>
   </div>
+</div>
 
+<div class="my-4">
   <div class="row">
     <div class="col">
-      <div class="my-4">
-        <fieldset disabled="disabled" th:object="${employee}">
+      <fieldset disabled="disabled" th:object="${employeeDto}">
 
-          <div class="form-group">
-            <label for="lastname">Фамилия</label>
-            <input type="text" th:value="*{lastname}" class="form-control" id="lastname">
-          </div>
+        <div class="form-group">
+          <label for="lastname">Фамилия</label>
+          <input type="text" th:value="*{lastname}" class="form-control" id="lastname">
+        </div>
 
-          <div class="form-group">
-            <label for="firstname">Имя</label>
-            <input type="text" th:value="*{firstname}" class="form-control" id="firstname">
-          </div>
+        <div class="form-group">
+          <label for="firstname">Имя</label>
+          <input type="text" th:value="*{firstname}" class="form-control" id="firstname">
+        </div>
 
-          <div class="form-group">
-            <label for="patronymic">Отчество</label>
-            <input type="text" th:value="*{patronymic}" class="form-control" id="patronymic">
-          </div>
+        <div class="form-group">
+          <label for="patronymic">Отчество</label>
+          <input type="text" th:value="*{patronymic}" class="form-control" id="patronymic">
+        </div>
 
-          <div class="form-group">
-            <label for="birthdate">Дата рождения</label>
-            <input type="date" th:value="*{birthdate}" class="form-control" id="birthdate">
-          </div>
+        <div class="form-group">
+          <label for="birthdate">Дата рождения</label>
+          <input type="date" th:value="*{birthdate}" class="form-control" id="birthdate">
+        </div>
 
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" th:value="*{email}" class="form-control" id="email">
-          </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" th:value="*{email}" class="form-control" id="email">
+        </div>
 
-          <div class="form-group">
-            <label for="telephoneNumber">Номер телефона</label>
-            <input type="tel" th:value="*{telephoneNumber}" class="form-control" id="telephoneNumber">
-          </div>
+        <div class="form-group">
+          <label for="telephoneNumber">Номер телефона</label>
+          <input type="tel" th:value="*{telephoneNumber}" class="form-control" id="telephoneNumber">
+        </div>
 
-        </fieldset>
-      </div>
+      </fieldset>
     </div>
   </div>
+</div>
 
+<div class="my-4">
   <div class="row">
-    <div class="col">
-      <div class="my-4 float-right">
+    <div class="col-md-auto">
+      <a th:href="@{/employees/{personnelNumber}/edit(personnelNumber=${employeeDto.personnelNumber})}"
+         class="btn btn-outline-primary btn-sm">
+        <i class="fa fa-edit"></i> Изменить
+      </a>
+    </div>
+    <div class="col-md-auto">
+      <div th:if="${vacancyDto}">
+        <form th:method="patch"
+              th:action="@{/employees/{personnelNumber}/removeFromVacancy(personnelNumber=${employeeDto.personnelNumber})}">
+          <button type="submit" class="btn btn-outline-primary btn-sm">
+            <i class="fa fa-unlink"></i> Снять с вакансии
+          </button>
+        </form>
+      </div>
+      <div th:unless="${vacancyDto}">
+        <a th:href="@{/employees/{personnelNumber}/appoint(personnelNumber=${employeeDto.personnelNumber})}"
+           class="btn btn-outline-primary btn-sm">
+          <i class="fa fa-link"></i> Назначить на вакансию
+        </a>
+      </div>
+    </div>
+    <div th:if="${vacancyDto}">
+      <div class="col-md-auto">
+        <a th:href="@{/employees/{personnelNumber}/transfer(personnelNumber=${employeeDto.personnelNumber})}"
+           class="btn btn-outline-primary btn-sm">
+          <i class="fa fa-arrow-right"></i> Перевести на другую вакансию
+        </a>
+      </div>
+    </div>
+    <div th:unless="${vacancyDto}">
+      <div class="col-md-auto">
         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeletion">
           <i class="fa fa-trash-alt"></i> Удалить
         </button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- The deleting submit modal -->
-  <div class="modal" id="confirmDeletion">
-    <div class="modal-dialog">
-      <div class="modal-content">
+<!-- The deleting submit modal -->
+<div class="modal" id="confirmDeletion">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Удаление сотрудника из базы</h4>
-        </div>
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          <p>Подтвердите удаление сотрудника<br>Действие необратимо!</p>
-          <p>
-            <span th:if="${employee.lastname}" th:text="${employee.lastname}">Фамилия</span>
-            <span th:if="${employee.firstname}" th:text="${employee.firstname}">Имя</span>
-            <span th:if="${employee.patronymic}" th:text="${employee.patronymic}">Отчество</span>
-            <br>
-            <span th:text="${#temporals.format(employee.birthdate, 'dd.MM.yyyy')}">dd.MM.yyyy</span>
-            <span> года рождения</span>
-          </p>
-        </div>
-
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary btn-sm" data-dismiss="modal">
-            <i class="fa fa-window-close"></i> Отмена
-          </button>
-          <form th:method="DELETE"
-                th:action="@{/employees/{personnelNumber}(personnelNumber=${employee.personnelNumber})}">
-            <button type="submit" class="btn btn-sm btn-danger">
-              <i class="fa fa-trash-alt"></i> Удалить
-            </button>
-          </form>
-        </div>
-
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Удаление сотрудника из базы</h4>
       </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <p>Подтвердите удаление сотрудника<br>Действие необратимо!</p>
+        <p>
+          <span th:if="${employeeDto.lastname}" th:text="${employeeDto.lastname}">Фамилия</span>
+          <span th:if="${employeeDto.firstname}" th:text="${employeeDto.firstname}">Имя</span>
+          <span th:if="${employeeDto.patronymic}" th:text="${employeeDto.patronymic}">Отчество</span>
+          <br>
+          <span th:text="${#temporals.format(employeeDto.birthdate, 'dd.MM.yyyy')}">dd.MM.yyyy</span>
+          <span> года рождения</span>
+        </p>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary btn-sm" data-dismiss="modal">
+          <i class="fa fa-window-close"></i> Отмена
+        </button>
+        <form th:method="DELETE"
+              th:action="@{/employees/{personnelNumber}(personnelNumber=${employeeDto.personnelNumber})}">
+          <button type="submit" class="btn btn-sm btn-danger">
+            <i class="fa fa-trash-alt"></i> Удалить
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
-
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-          crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-          integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-          crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-          integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-          crossorigin="anonymous"></script>
-
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>

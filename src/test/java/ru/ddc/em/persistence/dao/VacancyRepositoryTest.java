@@ -115,6 +115,13 @@ public class VacancyRepositoryTest {
         assertEquals(1, counterBeforeDelete - counterAfterDelete);
     }
 
+    @Test
+    public void whenFindAllEmployeesWithoutVacancy_thenListSizeEqualsTwo() {
+        List<Vacancy> vacancyList = vacancyRepository.findByEmployeeNull();
+        showVacancyList(vacancyList);
+        assertEquals(2, vacancyList.size());
+    }
+
     private static void showVacancyList(Iterable<Vacancy> vacancyList) {
         vacancyList.forEach(VacancyRepositoryTest::showVacancy);
     }

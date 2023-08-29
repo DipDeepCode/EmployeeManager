@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Перевод на другую вакансию</title>
+  <th:block th:insert="~{fragments/general.html :: headerfiles}"></th:block>
+</head>
+
+<body class="container">
+
+<th:block th:insert="~{fragments/general :: navbar(activelink='employees')}"></th:block>
+
+<div class="my-4">
+  <div class="row">
+    <div class="col-md-auto">
+      <h3>
+        <span th:text="${employeeDto.lastname}"></span>
+        <span th:text="${employeeDto.firstname}"></span>
+        <span th:text="${employeeDto.patronymic}"></span>
+        <span th:text="|#${#numbers.formatInteger(employeeDto.personnelNumber,5)}|"></span>
+      </h3>
+      <h5>
+        <span th:text="${vacancyDto.departmentDto.name}"></span>
+        <span th:text="${vacancyDto.departmentDto.number}"></span>
+        <br>
+        <span th:text="${vacancyDto.position}"></span>
+      </h5>
+    </div>
+    <div class="col align-self-end">
+      <div class="float-right">
+        <a th:href="@{/employees/{personnelNumber}(personnelNumber=${employeeDto.personnelNumber})}"
+           class="btn btn-outline-primary btn-sm">
+          <i class="fa fa-window-close"></i> Отмена
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="my-4">
+  <div class="row">
+    <div class="col">
+      <form th:action="@{/employees/{personnelNumber}/transfer(personnelNumber=${employeeDto.personnelNumber})}"
+            th:method="patch">
+        <input type="hidden" th:name="${personnelNumber}">
+        <label for="vacancyId">Перевести на вакансию:</label>
+        <div class="form-group">
+          <select class="form-control" id="vacancyId" name="vacancyId" required>
+            <option value="" selected disabled>--Выберите вакансию--</option>
+            <option th:each="vacancy : ${vacancyDtoList}"
+                    th:value="${vacancy.id}"
+                    th:text="${vacancy.departmentDto.name} + ' ' + ${vacancy.departmentDto.number} + ' ' + ${vacancy.position}"></option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-outline-primary btn-sm">
+          <i class="fa fa-arrow-right"></i> Перевести
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

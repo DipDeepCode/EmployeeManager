@@ -1,35 +1,56 @@
 package ru.ddc.em.web.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.ddc.em.persistence.entity.Employee;
+import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.service.EmployeeService;
+import ru.ddc.em.service.VacancyService;
 import ru.ddc.em.utils.custommapper.CustomMapper;
 import ru.ddc.em.web.dto.EmployeeDto;
 
 import jakarta.validation.Valid;
+import ru.ddc.em.web.dto.VacancyDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
+    private final VacancyService vacancyService;
     private final CustomMapper mapper;
 
-    public EmployeeController(EmployeeService employeeService, CustomMapper mapper) {
+    @Value("${em.employee.page.size}")
+    int size;
+
+    public EmployeeController(EmployeeService employeeService,
+                              VacancyService vacancyService,
+                              CustomMapper mapper) {
         this.employeeService = employeeService;
+        this.vacancyService = vacancyService;
         this.mapper = mapper;
     }
 
     @GetMapping
-    public String index(Model model) {
-        Page<Employee> employeePage = employeeService.findAll(0, 15);
-        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
-        model.addAttribute("employees", employeeDtoList);
+    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
+                        Model model) {
+        Page<Employee> employeePage = employeeService.findAll(page - 1, size);
+        Page<EmployeeDto> employeeDtoPage = mapper.mapPage(employeePage, EmployeeDto.class);
+        model.addAttribute("employeeDtoPage", employeeDtoPage);
+        int totalPages = employeeDtoPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
         return "employees/employee-index";
     }
 
@@ -38,7 +59,10 @@ public class EmployeeController {
                        Model model) {
         Employee employee = employeeService.findById(personnelNumber);
         EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
-        model.addAttribute("employee", employeeDto);
+        model.addAttribute("employeeDto", employeeDto);
+        Vacancy vacancy = employee.getVacancy();
+        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
+        model.addAttribute("vacancyDto", vacancyDto);
         return "employees/employee-show";
     }
 
@@ -48,6 +72,9 @@ public class EmployeeController {
         Employee employee = employeeService.findById(personnelNumber);
         EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
         model.addAttribute("employeeDto", employeeDto);
+        Vacancy vacancy = employee.getVacancy();
+        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
+        model.addAttribute("vacancyDto", vacancyDto);
         return "employees/employee-edit";
     }
 
@@ -79,6 +106,59 @@ public class EmployeeController {
             employeeService.save(employee);
             return "redirect:/employees";
         }
+    }
+
+    @PatchMapping("/{personnelNumber}/removeFromVacancy")
+    public String removeFromVacancy(@PathVariable("personnelNumber") Long personnelNumber,
+                                    Model model) {
+        employeeService.removeFromVacancy(personnelNumber);
+        return "redirect:/employees/" + personnelNumber;
+    }
+
+    @GetMapping("/{personnelNumber}/transfer")
+    public String transferToAnotherVacancy(@PathVariable("personnelNumber") Long personnelNumber,
+                                           Model model) {
+        Employee employee = employeeService.findById(personnelNumber);
+        EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
+        model.addAttribute("employeeDto", employeeDto);
+
+        Vacancy vacancy = employee.getVacancy();
+        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
+        model.addAttribute("vacancyDto", vacancyDto);
+
+        List<Vacancy> vacancyList = vacancyService.findByEmployeeNull();
+        List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyList, VacancyDto.class);
+        model.addAttribute("vacancyDtoList", vacancyDtoList);
+        return "/employees/employee-transfer";
+    }
+
+    @PatchMapping("/{personnelNumber}/transfer")
+    public String transferToAnotherVacancy(@PathVariable("personnelNumber") Long personnelNumber,
+                                           @RequestParam("vacancyId") Long vacancyId,
+                                           Model model) {
+        employeeService.transferToAnotherVacancy(personnelNumber, vacancyId);
+        return "redirect:/employees/" + personnelNumber;
+    }
+
+    @GetMapping("/{personnelNumber}/appoint")
+    public String appointToVacancy(@PathVariable("personnelNumber") Long personnelNumber,
+                                   Model model) {
+        Employee employee = employeeService.findById(personnelNumber);
+        EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
+        model.addAttribute("employeeDto", employeeDto);
+
+        List<Vacancy> vacancyList = vacancyService.findByEmployeeNull();
+        List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyList, VacancyDto.class);
+        model.addAttribute("vacancyDtoList", vacancyDtoList);
+        return "/employees/employee-appoint";
+    }
+
+    @PatchMapping("/{personnelNumber}/appoint")
+    public String appointToVacancy(@PathVariable("personnelNumber") Long personnelNumber,
+                                   @RequestParam("vacancyId") Long vacancyId,
+                                   Model model) {
+        employeeService.appointToVacancy(personnelNumber, vacancyId);
+        return "redirect:/employees/" + personnelNumber;
     }
 
     @DeleteMapping("/{personnelNumber}")

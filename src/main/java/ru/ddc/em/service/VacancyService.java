@@ -6,9 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.ddc.em.exceptions.DeleteEntityException;
 import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.persistence.dao.VacancyRepository;
-import ru.ddc.em.web.error.DeleteEntityError;
+
+import java.util.List;
 
 
 @Service
@@ -56,13 +58,17 @@ public class VacancyService {
         return vacancyRepository.findById(id).orElseThrow();
     }
 
-    public void deleteById(Long id) throws DeleteEntityError {
+    public void deleteById(Long id) {
         Vacancy vacancy = vacancyRepository.findById(id).orElseThrow();//TODO заполнить orElseThrow
         if (vacancy.getEmployee() == null) {
             vacancyRepository.deleteById(id);
         }
         else {
-            throw new DeleteEntityError("Нельзя удалить вакансию, так как к ней привязан работник");
+            throw new DeleteEntityException("Нельзя удалить вакансию, так как к ней привязан работник");
         }
+    }
+
+    public List<Vacancy> findByEmployeeNull() {
+        return vacancyRepository.findByEmployeeNull();
     }
 }

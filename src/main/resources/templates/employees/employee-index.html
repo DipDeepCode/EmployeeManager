@@ -1,94 +1,92 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Сотрудники</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
-        integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-  <link rel="stylesheet" th:href="@{/css/shards.min.css}">
+  <th:block th:insert="~{fragments/general :: headerfiles}"></th:block>
 </head>
-<body>
 
-<div class="container my-5 border">
+<body class="container">
 
+<th:block th:insert="~{fragments/general :: navbar(activelink='employees')}"></th:block>
+
+<div class="my-4">
   <div class="row">
     <div class="col">
-      <div class="my-4">
-        <h3>Сотрудники</h3>
-      </div>
+      <h3>Сотрудники</h3>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <div class="my-4">
+    <div class="col align-self-end">
+      <div class="float-right">
         <a th:href="@{/employees/create}"
            class="btn btn-outline-primary btn-sm">
           <i class="fa fa-plus-square"></i> Добавить сотрудника
         </a>
       </div>
     </div>
-    <div class="col">
-      <div class="my-4 float-right">
-        <a th:href="@{/}" class="btn btn-outline-primary btn-sm">
-          <i class="fa fa-window-close"></i>
-        </a>
-      </div>
-    </div>
   </div>
+</div>
 
-  <div th:switch="${#arrays.length(employees)}" class="row">
+<div class="my-4">
+  <div th:switch="${#arrays.length(employeeDtoPage)}" class="row">
     <div th:case="0" class="col text-center">
-      <div class="my-4">
-        <h3>Сотрудники отсутствуют</h3>
-      </div>
+      <h3>Сотрудники отсутствуют</h3>
     </div>
     <div th:case="*" class="col">
-      <div class="my-4">
-        <table class="table table-striped table-responsive-md">
+      <table class="table table-striped table-responsive-md">
 
-          <thead>
-          <tr>
-            <th>Табельный номер</th>
-            <th>ФИО</th>
-            <th>Дата рождения</th>
-            <th>Подробнее</th>
-          </tr>
-          </thead>
+        <thead>
+        <tr>
+          <th>Табельный номер</th>
+          <th>ФИО</th>
+          <th>Дата рождения</th>
+          <th>Подробнее</th>
+        </tr>
+        </thead>
 
-          <tbody>
-          <tr th:each="employee : ${employees}">
+        <tbody>
+        <tr th:each="employee : ${employeeDtoPage}">
 
-            <td th:text="${employee.personnelNumber}"></td>
+          <td th:text="|${#numbers.formatInteger(employee.personnelNumber,5)}|"></td>
 
-            <td>
-              <span th:if="${employee.lastname}" th:text="${employee.lastname}"></span>
-              <span th:if="${employee.firstname}" th:text="${employee.firstname}"></span>
-              <span th:if="${employee.patronymic}" th:text="${employee.patronymic}"></span>
-            </td>
+          <td>
+            <span th:if="${employee.lastname}" th:text="${employee.lastname}"></span>
+            <span th:if="${employee.firstname}" th:text="${employee.firstname}"></span>
+            <span th:if="${employee.patronymic}" th:text="${employee.patronymic}"></span>
+          </td>
 
-            <td th:text="${#temporals.format(employee.birthdate, 'dd.MM.yyyy')}"></td>
+          <td th:text="${#temporals.format(employee.birthdate, 'dd.MM.yyyy')}"></td>
 
-            <td>
-              <a th:href="@{/employees/{personnelNumber}(personnelNumber=${employee.personnelNumber})}"
-                 class="btn btn-outline-primary btn-sm">
-                <i class="fa fa-eye"></i>
-              </a>
-            </td>
+          <td>
+            <a th:href="@{/employees/{personnelNumber}(personnelNumber=${employee.personnelNumber})}"
+               class="btn btn-outline-primary btn-sm">
+              <i class="fa fa-eye"></i>
+            </a>
+          </td>
 
-          </tr>
-          </tbody>
+        </tr>
+        </tbody>
 
-        </table>
+      </table>
 
-      </div>
     </div>
   </div>
 </div>
+
+<div class="my-4">
+  <div class="row">
+    <div class="col">
+      <ul th:if="${employeeDtoPage.totalPages > 1}" class="pagination justify-content-center">
+        <li th:each="pageNumber : ${pageNumbers}" class="page-item"
+            th:classappend="${pageNumber==employeeDtoPage.number + 1} ? disabled">
+          <a class="page-link"
+             th:href="@{/employees(page=${pageNumber})}"
+             th:text=${pageNumber}>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

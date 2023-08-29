@@ -3,6 +3,7 @@ package ru.ddc.em.utils.custommapper;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,15 +23,13 @@ public class CustomMapper {
         return modelMapper.map(source, targetClass);
     }
 
-//    public <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
-//        return source.stream()
-//                .map(element -> modelMapper.map(element, targetClass))
-//                .toList();
-//    }
-
     public <S, T> List<T> mapIterable(Iterable<S> source, Class<T> targetClass) {
         return StreamSupport.stream(source.spliterator(), false)
                 .map(element -> modelMapper.map(element, targetClass))
                 .toList();
+    }
+
+    public <S, T> Page<T> mapPage(Page<S> source, Class<T> targetClass) {
+        return source.map(element -> map(element, targetClass));
     }
 }
