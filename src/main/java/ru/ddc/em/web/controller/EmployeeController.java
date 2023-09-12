@@ -60,9 +60,6 @@ public class EmployeeController {
         Employee employee = employeeService.findById(personnelNumber);
         EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
         model.addAttribute("employeeDto", employeeDto);
-        Vacancy vacancy = employee.getVacancy();
-        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
-        model.addAttribute("vacancyDto", vacancyDto);
         return "employees/employee-show";
     }
 
@@ -80,7 +77,7 @@ public class EmployeeController {
 
     @PatchMapping("/{personnelNumber}")
     public String update(@PathVariable("personnelNumber") Long personnelNumber,
-                         @ModelAttribute("employee") @Valid EmployeeDto employeeDto,
+                         @ModelAttribute("employeeDto") @Valid EmployeeDto employeeDto,
                          BindingResult result) {
         if (result.hasErrors()) {
             return "employees/employee-edit";
@@ -92,12 +89,12 @@ public class EmployeeController {
     }
 
     @GetMapping("/create")
-    public String create(@ModelAttribute("employee") EmployeeDto employeeDto) {
+    public String create(@ModelAttribute("employeeDto") EmployeeDto employeeDto) {
         return "employees/employee-create";
     }
 
     @PostMapping
-    public String store(@ModelAttribute("employee") @Valid EmployeeDto employeeDto,
+    public String store(@ModelAttribute("employeeDto") @Valid EmployeeDto employeeDto,
                         BindingResult result) {
         if (result.hasErrors()) {
             return "employees/employee-create";

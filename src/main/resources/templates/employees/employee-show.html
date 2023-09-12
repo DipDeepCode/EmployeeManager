@@ -19,15 +19,15 @@
         <span th:text="${employeeDto.patronymic}"></span>
         <span th:text="|#${#numbers.formatInteger(employeeDto.personnelNumber,5)}|"></span>
       </h3>
-      <div th:if="${vacancyDto}">
+      <div th:if="${employeeDto.vacancyDto}">
         <h5>
-          <span th:text="${vacancyDto.departmentDto.name}"></span>
-          <span th:text="${vacancyDto.departmentDto.number}"></span>
+          <span th:text="${employeeDto.vacancyDto.departmentDto.name}"></span>
+          <span th:text="${employeeDto.vacancyDto.departmentDto.number}"></span>
           <br>
-          <span th:text="${vacancyDto.position}"></span>
+          <span th:text="${employeeDto.vacancyDto.position}"></span>
         </h5>
       </div>
-      <div th:unless="${vacancyDto}">
+      <div th:unless="${employeeDto.vacancyDto}">
         <h5>Сотрудник не закреплен за вакансией</h5>
       </div>
     </div>
@@ -90,7 +90,7 @@
       </a>
     </div>
     <div class="col-md-auto">
-      <div th:if="${vacancyDto}">
+      <div th:if="${employeeDto.vacancyDto}">
         <form th:method="patch"
               th:action="@{/employees/{personnelNumber}/removeFromVacancy(personnelNumber=${employeeDto.personnelNumber})}">
           <button type="submit" class="btn btn-outline-primary btn-sm">
@@ -98,14 +98,14 @@
           </button>
         </form>
       </div>
-      <div th:unless="${vacancyDto}">
+      <div th:unless="${employeeDto.vacancyDto}">
         <a th:href="@{/employees/{personnelNumber}/appoint(personnelNumber=${employeeDto.personnelNumber})}"
            class="btn btn-outline-primary btn-sm">
           <i class="fa fa-link"></i> Назначить на вакансию
         </a>
       </div>
     </div>
-    <div th:if="${vacancyDto}">
+    <div th:if="${employeeDto.vacancyDto}">
       <div class="col-md-auto">
         <a th:href="@{/employees/{personnelNumber}/transfer(personnelNumber=${employeeDto.personnelNumber})}"
            class="btn btn-outline-primary btn-sm">
@@ -113,7 +113,7 @@
         </a>
       </div>
     </div>
-    <div th:unless="${vacancyDto}">
+    <div th:unless="${employeeDto.vacancyDto}">
       <div class="col-md-auto">
         <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#confirmDeletion">
           <i class="fa fa-trash-alt"></i> Удалить

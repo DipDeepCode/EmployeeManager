@@ -16,12 +16,12 @@ public class ModelMapperConfig {
     public ModelMapper getModelMapper() {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        modelMapper.createTypeMap(Employee.class, EmployeeDto.class)
+                .addMapping(Employee::getVacancy, EmployeeDto::setVacancyDto);
+
         modelMapper.createTypeMap(Vacancy.class, VacancyDto.class)
                 .addMapping(Vacancy::getDepartment, VacancyDto::setDepartmentDto);
-//                .addMapping(Vacancy::getEmployee, VacancyDto::setEmployeeDto);
-        modelMapper.createTypeMap(VacancyDto.class, Vacancy.class)
-                .addMapping(VacancyDto::getDepartmentDto, Vacancy::setDepartment);
-//                .addMapping(VacancyDto::getEmployeeDto, Vacancy::setEmployee);
 
         return modelMapper;
     }

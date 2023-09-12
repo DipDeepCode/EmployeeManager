@@ -23,6 +23,19 @@ public class EmployeeRepositoryTest {
     private EmployeeRepository employeeRepository;
 
     @Test
+    public void when_findEmployeeById_then_employeeContainsVacancyAndDepartment() {
+        Employee employee = employeeRepository.findById(1L).orElseThrow();
+        assertNotNull(employee.getVacancy());
+        assertNotNull(employee.getVacancy().getDepartment());
+    }
+
+
+
+
+
+
+
+    @Test
     public void whenFindAllEmployees_thenListSizeEqualsFive() {
         List<Employee> employeeList = employeeRepository.findAll();
         showEmployeeList(employeeList);

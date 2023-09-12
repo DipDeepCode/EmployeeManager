@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "vacancy")
 public class Vacancy {
@@ -25,14 +24,11 @@ public class Vacancy {
     @Column(name = "salary", nullable = false)
     private Float salary;
 
-    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @ToString.Exclude
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "employee_personnel_number", unique = true)
     private Employee employee;
-
 }

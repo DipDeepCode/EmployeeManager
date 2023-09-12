@@ -22,9 +22,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Page<Employee> findAll(Pageable pageable);
 
     @EntityGraph(attributePaths = "vacancy")
-    Optional<Employee> findById(@Nonnull Long personnelNumber);
-
-    @EntityGraph(attributePaths = "vacancy")
     List<Employee> findByVacancyNull();
 
     @EntityGraph(attributePaths = "vacancy")
