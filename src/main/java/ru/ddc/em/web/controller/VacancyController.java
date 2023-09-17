@@ -1,12 +1,10 @@
 package ru.ddc.em.web.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.ddc.em.persistence.entity.Department;
 import ru.ddc.em.persistence.entity.Employee;
@@ -90,13 +88,13 @@ public class VacancyController {
     public String showNewVacancyForm(@ModelAttribute("vacancy") VacancyDto vacancyDto,
                                      Model model) {
 //        addDepartmentAndListOfEmployeesToModel(model, departmentId);
-        List<Employee> employeePage = employeeService.findAllNotAssignedToAnyDepartment();
-        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
-        model.addAttribute("employees", employeeDtoList);
-
-        List<Department> departmentList = departmentService.findAll(Sort.by("number").ascending());
-        List<DepartmentDto> departmentDtoList = mapper.mapIterable(departmentList, DepartmentDto.class);
-        model.addAttribute("departments", departmentDtoList);
+//        List<Employee> employeePage = employeeService.findAllNotAssignedToAnyVacancy();
+//        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
+//        model.addAttribute("employees", employeeDtoList);
+//
+//        List<Department> departmentList = departmentService.findAll(Sort.by("number").ascending());
+//        List<DepartmentDto> departmentDtoList = mapper.mapIterable(departmentList, DepartmentDto.class);
+//        model.addAttribute("departments", departmentDtoList);
         return "vacancies/vacancies_new";
     }
 
@@ -123,23 +121,23 @@ public class VacancyController {
 
     private void addDepartmentAndListOfEmployeesToModel(Model model,
                                                         Long departmentId) {
-        Department department = departmentService.findById(departmentId);
-        DepartmentDto departmentDto = mapper.map(department, DepartmentDto.class);
-        model.addAttribute("department", departmentDto);
-        List<Employee> employeePage = employeeService.findAllNotAssignedToAnyDepartment();
-        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
-        model.addAttribute("employees", employeeDtoList);
+//        Department department = departmentService.findById(departmentId);
+//        DepartmentDto departmentDto = mapper.map(department, DepartmentDto.class);
+//        model.addAttribute("department", departmentDto);
+//        List<Employee> employeePage = employeeService.findAllNotAssignedToAnyVacancy();
+//        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeePage, EmployeeDto.class);
+//        model.addAttribute("employees", employeeDtoList);
     }
 
     @GetMapping("/{id}/edit")
     public String showUpdateVacancyForm(@PathVariable("id") Long id,
                                  Model model) {
-        Vacancy vacancy = vacancyService.findById(id);
-        VacancyDto vacancyDto = mapper.map(vacancy, VacancyDto.class);
-        model.addAttribute("vacancy", vacancyDto);
-        List<Employee> employeeList = employeeService.findAllNotAssignedToAnyDepartment();
-        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeeList, EmployeeDto.class);
-        model.addAttribute("employees", employeeDtoList);
+//        Vacancy vacancy = vacancyService.findById(id);
+//        VacancyDto vacancyDto = mapper.map(vacancy, VacancyDto.class);
+//        model.addAttribute("vacancy", vacancyDto);
+//        List<Employee> employeeList = employeeService.findAllNotAssignedToAnyVacancy();
+//        List<EmployeeDto> employeeDtoList = mapper.mapIterable(employeeList, EmployeeDto.class);
+//        model.addAttribute("employees", employeeDtoList);
         return "vacancies/vacancies_edit";
     }
 

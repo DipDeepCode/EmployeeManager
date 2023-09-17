@@ -1,5 +1,6 @@
 package ru.ddc.em.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.persistence.dao.VacancyRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -62,13 +64,16 @@ public class VacancyService {
         Vacancy vacancy = vacancyRepository.findById(id).orElseThrow();//TODO заполнить orElseThrow
         if (vacancy.getEmployee() == null) {
             vacancyRepository.deleteById(id);
-        }
-        else {
+        } else {
             throw new DeleteEntityException("Нельзя удалить вакансию, так как к ней привязан работник");
         }
     }
 
     public List<Vacancy> findByEmployeeNull() {
         return vacancyRepository.findByEmployeeNull();
+    }
+
+    public Optional<Vacancy> findByEmployeePersonnelNumber(Long employeePersonnelNumber) {
+        return vacancyRepository.findByEmployeePersonnelNumber(employeePersonnelNumber);
     }
 }

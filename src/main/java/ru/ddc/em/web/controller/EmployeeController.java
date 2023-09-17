@@ -1,5 +1,6 @@
 package ru.ddc.em.web.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -20,15 +21,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Slf4j
 @Controller
 @RequestMapping("/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final VacancyService vacancyService;
     private final CustomMapper mapper;
-
-    @Value("${em.employee.page.size}")
-    int size;
+    private Integer previousPageNo = 1;
 
     public EmployeeController(EmployeeService employeeService,
                               VacancyService vacancyService,
@@ -39,26 +39,27 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String index(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String index(@RequestParam(value = "page", required = false) Integer pageNo,
                         Model model) {
-        Page<Employee> employeePage = employeeService.findAll(page - 1, size);
-        Page<EmployeeDto> employeeDtoPage = mapper.mapPage(employeePage, EmployeeDto.class);
+        pageNo = pageNo == null ? previousPageNo : pageNo;
+        previousPageNo = pageNo;
+        Page<EmployeeDto> employeeDtoPage = employeeService.findAllDto(pageNo);
         model.addAttribute("employeeDtoPage", employeeDtoPage);
-        int totalPages = employeeDtoPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+        List<Integer> pageNumbers = getPagesList(employeeDtoPage);
+        model.addAttribute("pageNumbers", pageNumbers);
         return "employees/employee-index";
+    }
+
+    private List<Integer> getPagesList(Page<EmployeeDto> employeeDtoPage) {
+        return IntStream.rangeClosed(1, employeeDtoPage.getTotalPages())
+                .boxed()
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{personnelNumber}")
     public String show(@PathVariable("personnelNumber") Long personnelNumber,
                        Model model) {
-        Employee employee = employeeService.findById(personnelNumber);
-        EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
+        EmployeeDto employeeDto = employeeService.findDtoById(personnelNumber);
         model.addAttribute("employeeDto", employeeDto);
         return "employees/employee-show";
     }
@@ -69,9 +70,9 @@ public class EmployeeController {
         Employee employee = employeeService.findById(personnelNumber);
         EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
         model.addAttribute("employeeDto", employeeDto);
-        Vacancy vacancy = employee.getVacancy();
-        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
-        model.addAttribute("vacancyDto", vacancyDto);
+//        Vacancy vacancy = employee.getVacancy();
+//        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
+//        model.addAttribute("vacancyDto", vacancyDto);
         return "employees/employee-edit";
     }
 
@@ -119,9 +120,9 @@ public class EmployeeController {
         EmployeeDto employeeDto = mapper.map(employee, EmployeeDto.class);
         model.addAttribute("employeeDto", employeeDto);
 
-        Vacancy vacancy = employee.getVacancy();
-        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
-        model.addAttribute("vacancyDto", vacancyDto);
+//        Vacancy vacancy = employee.getVacancy();
+//        VacancyDto vacancyDto = vacancy != null ? mapper.map(vacancy, VacancyDto.class) : null;
+//        model.addAttribute("vacancyDto", vacancyDto);
 
         List<Vacancy> vacancyList = vacancyService.findByEmployeeNull();
         List<VacancyDto> vacancyDtoList = mapper.mapIterable(vacancyList, VacancyDto.class);

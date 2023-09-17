@@ -122,6 +122,20 @@ public class VacancyRepositoryTest {
         assertEquals(2, vacancyList.size());
     }
 
+    @Test
+    public void when_findByExistsEmployeePersonnelNumber_then_resultConsistEmployeeAndDepartment() {
+        Vacancy vacancy = vacancyRepository.findByEmployeePersonnelNumber(5L).orElseThrow();
+        showVacancy(vacancy);
+        assertNotNull(vacancy);
+        assertNotNull(vacancy.getEmployee());
+        assertNotNull(vacancy.getDepartment());
+    }
+
+    @Test
+    public void when_findByNotExistsEmployeePersonnelNumber_then_throwException() {
+
+    }
+
     private static void showVacancyList(Iterable<Vacancy> vacancyList) {
         vacancyList.forEach(VacancyRepositoryTest::showVacancy);
     }

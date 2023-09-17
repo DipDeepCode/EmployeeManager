@@ -14,7 +14,6 @@ public class EmployeeTestBuilder implements TestBuilder<Employee> {
     private String firstname = "firstname";
     private String lastname = "lastname";
     private String patronymic = "patronymic";
-    private Vacancy vacancy = null;
 
     @Override
     public Employee build() {
@@ -23,7 +22,6 @@ public class EmployeeTestBuilder implements TestBuilder<Employee> {
         employee.setFirstname(firstname);
         employee.setLastname(lastname);
         employee.setPatronymic(patronymic);
-        employee.setVacancy(vacancy);
         return employee;
     }
 }

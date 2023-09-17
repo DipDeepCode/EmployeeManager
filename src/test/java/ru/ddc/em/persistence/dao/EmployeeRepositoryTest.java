@@ -23,22 +23,8 @@ public class EmployeeRepositoryTest {
     private EmployeeRepository employeeRepository;
 
     @Test
-    public void when_findEmployeeById_then_employeeContainsVacancyAndDepartment() {
-        Employee employee = employeeRepository.findById(1L).orElseThrow();
-        assertNotNull(employee.getVacancy());
-        assertNotNull(employee.getVacancy().getDepartment());
-    }
-
-
-
-
-
-
-
-    @Test
     public void whenFindAllEmployees_thenListSizeEqualsFive() {
         List<Employee> employeeList = employeeRepository.findAll();
-        showEmployeeList(employeeList);
         assertEquals(5, employeeList.size());
     }
 
@@ -63,21 +49,6 @@ public class EmployeeRepositoryTest {
     public void whenFindMissingEmployeeById_thenReturnEmptyOptional() {
         Optional<Employee> optionalEmployee = employeeRepository.findById(100L);
         assertTrue(optionalEmployee.isEmpty());
-    }
-
-    @Test
-    public void whenFindEmployeesByVacancyIsNull_thenListSizeEqualsOne() {
-        List<Employee> employeeList = employeeRepository.findByVacancyNull();
-        showEmployeeList(employeeList);
-        assertEquals(1, employeeList.size());
-    }
-
-    @Test
-    public void whenFindEmployeesByVacancyIsNullSort_thenListSizeEqualsOne() {
-        Sort sort = Sort.by(Sort.Direction.ASC, "patronymic", "firstname", "lastname");
-        List<Employee> employeeList = employeeRepository.findByVacancyNull(sort);
-        showEmployeeList(employeeList);
-        assertEquals(1, employeeList.size());
     }
 
     @Test

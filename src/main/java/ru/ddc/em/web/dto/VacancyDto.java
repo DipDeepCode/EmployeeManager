@@ -11,4 +11,5 @@ public class VacancyDto {
     private String position;
     private Long salary;
     private DepartmentDto departmentDto;
+    private EmployeeDto employeeDto;
 }
