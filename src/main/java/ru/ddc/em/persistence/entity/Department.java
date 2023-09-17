@@ -3,7 +3,6 @@ package ru.ddc.em.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "department")
 public class Department {
@@ -28,7 +26,6 @@ public class Department {
     @Column(name = "name", length = 64, nullable = false, unique = true)
     private String name;
 
-    @ToString.Exclude
     @OneToMany(mappedBy = "department")
     private List<Vacancy> vacancies = new ArrayList<>();
 

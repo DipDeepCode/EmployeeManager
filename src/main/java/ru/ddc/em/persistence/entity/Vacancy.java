@@ -3,7 +3,6 @@ package ru.ddc.em.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
 @Getter
@@ -24,11 +23,11 @@ public class Vacancy {
     @Column(name = "salary", nullable = false)
     private Float salary;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_personnel_number", unique = true)
     private Employee employee;
 }

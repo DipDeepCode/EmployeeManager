@@ -3,14 +3,12 @@ package ru.ddc.em.persistence.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -38,8 +36,4 @@ public class Employee {
 
     @Column(name = "telephone_number")
     private String telephoneNumber;
-
-    @ToString.Exclude
-    @OneToOne(mappedBy = "employee")
-    private Vacancy vacancy;
 }
