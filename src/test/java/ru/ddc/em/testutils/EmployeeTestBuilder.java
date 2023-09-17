@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import ru.ddc.em.persistence.entity.Employee;
-import ru.ddc.em.persistence.entity.Vacancy;
 
 @AllArgsConstructor
 @NoArgsConstructor(staticName = "aEmployee")

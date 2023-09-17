@@ -2,19 +2,16 @@ package ru.ddc.em.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.ddc.em.persistence.entity.Department;
-import ru.ddc.em.persistence.entity.Employee;
 import ru.ddc.em.persistence.entity.Vacancy;
 import ru.ddc.em.service.DepartmentService;
 import ru.ddc.em.service.EmployeeService;
 import ru.ddc.em.service.VacancyService;
 import ru.ddc.em.utils.custommapper.CustomMapper;
 import ru.ddc.em.web.dto.DepartmentDto;
-import ru.ddc.em.web.dto.EmployeeDto;
 import ru.ddc.em.web.dto.VacancyDto;
 
 import java.util.List;
